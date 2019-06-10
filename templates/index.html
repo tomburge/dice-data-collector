@@ -1,0 +1,51 @@
+{% extends "base.html" %} 
+
+{% block body %} 
+
+<div class="clr-row">
+        <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
+            <form role="form" name="vrops-connect" id="vrops-connect" method="POST" action="{{ url_for('vrops_connect') }}">
+            <div class="card">
+                <div class="card-header">
+                    vRealize Operations Manager Connection
+                </div>
+                <div class="card-block">
+                    <div class="card-text">
+                            <section class="form-block">
+                                    {{ form.csrf_token }}
+                                <div class="form-group">
+                                    {{ form.vropshost.label }}
+                                    {{ form.vropshost(class="clrInput", placeholder="vrops.company.org") }}
+                                    <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                        <clr-icon shape="info-circle" size="24"></clr-icon>
+                                        <span class="tooltip-content">Please provide the FQDN of the vROPs Master ex: vrops.company.org</span>
+                                    </a>
+                                </div>
+                                <div class="form-group">
+                                    {{ form.vropsuser.label }}
+                                    {{ form.vropsuser(class="clrInput", placeholder="Username") }}
+                                    <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                        <clr-icon shape="info-circle" size="24"></clr-icon>
+                                        <span class="tooltip-content">Please provide a username that has access to read data from vROPs.</span>
+                                    </a>
+                                </div>
+                                <div class="form-group">
+                                    {{ form.vropspass.label }}
+                                    {{ form.vropspass(class="clrInput", placeholder="Password") }}
+                                    <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                        <clr-icon shape="info-circle" size="24"></clr-icon>
+                                        <span class="tooltip-content">Please provide the password for the username.</span>
+                                    </a>
+                                </div>
+                            </section>
+                    </div>
+                </div>
+                <div class="card-footer">
+                        {{ form.submit(class="btn btn-primary center") }}
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

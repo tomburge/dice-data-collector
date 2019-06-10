@@ -1,0 +1,11 @@
+{% extends "base.html" %} 
+
+{% block body %} 
+
+<h4>Here is the link to the completed JSON file:</h4>
+
+<p></p>
+
+<h4><a href="{{ url_for('static', filename='json/dice.json') }}" download>Dice JSON</a></h4>
+
+{% endblock %}

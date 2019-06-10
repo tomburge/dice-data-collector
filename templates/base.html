@@ -1,0 +1,33 @@
+<html>
+  <head>
+    {% assets "js_all" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %} {% assets "css_all" %}
+    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}" />
+    {% endassets %}
+    <title>vROPs Collector for DICE</title>
+  </head>
+  <body>
+    <!-- Div Container for NavBar  -->
+    <div class="main-container">
+        <header class="header header-6">
+          <div class="branding">
+            <a href="/">
+              <span><clr-icon shape="vm-bug"></clr-icon></span>
+              <span class="title">Data Collector for DICE</span>
+            </a>
+          </div>
+          <div class="header-nav">
+            <a class="nav-link nav-icon" href="/about">
+                <clr-icon shape="unknown-status"></clr-icon>
+            </a>
+          </div>
+        </header>
+        <div class="content-container">
+            <div class="content-area">
+                {% block body %} {% endblock %}
+            </div>
+        </div>
+    </div>
+  </body>
+</html>

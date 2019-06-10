@@ -1,0 +1,16 @@
+certifi==2019.3.9
+chardet==3.0.4
+Click==7.0
+Flask==1.0.3
+Flask-Assets==0.12
+Flask-WTF==0.14.2
+gunicorn==19.9.0
+idna==2.8
+itsdangerous==1.1.0
+Jinja2==2.10.1
+MarkupSafe==1.1.1
+requests==2.22.0
+urllib3==1.25.3
+webassets==0.12.1
+Werkzeug==0.15.4
+WTForms==2.2.1

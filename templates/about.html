@@ -1,0 +1,24 @@
+{% extends "base.html" %} 
+
+{% block body %} 
+
+<p></p>
+DICE is a tool created by VMware to consume customer environment data and use it to build a functional return on investment model.
+<p></p>
+The Data Collector for DICE is deployed in a customer environment to collect data from vRealize Operations Manager.
+<p></p>
+The following data is collected:
+<p></p>
+<ul>
+    <li>Virtual Machine Object Properties and Metrics</li>
+    <li>Host Machine Object Properties and Metrics</li>
+    <li>Cluster Object Metrics</li>
+    <li>Distributed Virtual Switch Object Metrics</li>
+    <li>Portgroup Object Metrics</li>
+    <li>Datastore Object Metrics</li>
+</ul>
+<p></p>
+All of this data is dumped into a JSON formatted file that can be uploaded into the DICE tool.
+
+
+{% endblock %}
