@@ -8,9 +8,9 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # global auth variables
-host = ''
-username = ''
-password = ''
+host = 'vrops.home.lab'
+username = 'admin'
+password = 'Pa$$w0rd'
 
 # resource kinds
 virtual_machines = {}
@@ -32,13 +32,13 @@ dice_json = {
     'datastores': {}
     }
 
-def pull_data_from_vrops(vropshost, vropsuser, vropspass):
+def pull_data_from_vrops():
     # ------------------------------------------------------
     # Pulling data from flask form and populating global auth variables
     # ------------------------------------------------------
-    host = vropshost
-    username = vropsuser
-    password = vropspass
+    # host = vropshost
+    # username = vropsuser
+    # password = vropspass
     # ------------------------------------------------------
     # formatting vROPS API URL
     # ------------------------------------------------------
@@ -248,4 +248,9 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass):
     # populating global data
     populate_data()
     # ------------------------------------------------------
-    return dice_json
+    # # return dice_json
+
+pull_data_from_vrops()
+
+with open('dice.json', 'w') as j:
+    json.dump(dice_json, j, indent=4)
