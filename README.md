@@ -21,3 +21,7 @@ TODOs
 -Change web layer to Gunicorn/nginx
 
 -Add error checking (Any error comes up as Error 500 currently)
+
+-Add loading screen while appliance is collecting data
+
+-Replicate TDM functionality for vCenter
