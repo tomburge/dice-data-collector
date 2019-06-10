@@ -18,10 +18,27 @@ https://onevmw-my.sharepoint.com/:f:/g/personal/tburge_vmware_com/EnVAcMX3T75Cg3
 
 TODOs
 
+# Quick
+
 -Change web layer to Gunicorn/nginx
+
+-Add timestamp to filename
+
+-Add property collection for other object types
+
+# Not quick
 
 -Add error checking (Any error comes up as Error 500 currently)
 
 -Add loading screen while appliance is collecting data
 
 -Replicate TDM functionality for vCenter
+
+-Investigate collecting telegraf metrics (Tom)
+
+-Investigate pushing JSON data to API instead of download (Tom)
+
+-Investigate using appliance to push vrops to vCenter (Tom)
+
+# Adds by the team
+
