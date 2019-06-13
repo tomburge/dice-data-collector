@@ -2,15 +2,34 @@ import requests
 import json
 import os
 import platform
+import datetime
+import logging
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 # disable ssl warnings for self signed certs
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+# create logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+# create console handler and set level to debug
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+
+# create formatter
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# add formatter to ch
+ch.setFormatter(formatter)
+
+# add ch to logger
+logger.addHandler(ch)
+
 # global auth variables
 host = 'vrops.home.lab'
 username = 'admin'
-password = 'Pa$$w0rd'
+password = 'Pa$$w0r'
 
 # resource kinds
 virtual_machines = {}
@@ -252,5 +271,7 @@ def pull_data_from_vrops():
 
 pull_data_from_vrops()
 
-with open('dice.json', 'w') as j:
+dice_file = 'dice_vrops_output_' + str(datetime.date.today()) + '.json'
+
+with open(dice_file, 'w') as j:
     json.dump(dice_json, j, indent=4)
