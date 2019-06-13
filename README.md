@@ -10,7 +10,7 @@ To get started:
 
 1. Clone the Repo
 2. CD into the directory and run docker build -t dice-data-collector .
-3. docker run --restart=always --name dice-data-collector -p 80:5000 dice-data-collector
+3. docker run --restart=always --name dice-data-collector -p 80:8000 dice-data-collector
 
 or download the OVA from: 
 
@@ -41,4 +41,5 @@ TODOs
 -Investigate using appliance to push vrops to vCenter (Tom)
 
 # Adds by the team
+
 
