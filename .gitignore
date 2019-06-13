@@ -89,7 +89,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-diceflask
+dicecollector
 
 # Spyder project settings
 .spyderproject
