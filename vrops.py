@@ -1,7 +1,8 @@
 import requests
 import json
-import os
+import os, fnmatch
 import platform
+import datetime
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 # disable ssl warnings for self signed certs
@@ -11,6 +12,9 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 host = ''
 username = ''
 password = ''
+
+# random vars
+cust_id = ''
 
 # resource kinds
 virtual_machines = {}
@@ -24,6 +28,8 @@ vmware_adapter_resouces = {}
 # global dict for objects
 dice_json = {
     'source': 'vrops',
+    'customer_id': '',
+    'filename': '',
     'vms': {},
     'hosts': {},
     'clusters':{},
@@ -32,13 +38,25 @@ dice_json = {
     'datastores': {}
     }
 
-def pull_data_from_vrops(vropshost, vropsuser, vropspass):
+def get_list_of_json_files():
+    ''' This function builds a list of JSON files '''
+    # listOfFiles = os.listdir('.\\static\\json') # Windows
+    listOfFiles = os.listdir('./static/json') # Linux
+    pattern = '*.json'
+    json_list = []
+    for files in listOfFiles:  
+        if fnmatch.fnmatch(files, pattern):
+            json_list.append(files)
+    return json_list
+
+def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
     # ------------------------------------------------------
     # Pulling data from flask form and populating global auth variables
     # ------------------------------------------------------
     host = vropshost
     username = vropsuser
     password = vropspass
+    cust_id = customer_id
     # ------------------------------------------------------
     # formatting vROPS API URL
     # ------------------------------------------------------
@@ -245,6 +263,8 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass):
         populate_datastore()
         populate_datastore_properties()
     # ------------------------------------------------------
+    dice_json['customer_id'] = cust_id
+    dice_json['filename'] = 'dice_vrops_output_' + str(datetime.date.today()) + '.json'
     # populating global data
     populate_data()
     # ------------------------------------------------------

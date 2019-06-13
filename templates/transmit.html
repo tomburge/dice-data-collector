@@ -1,0 +1,15 @@
+{% extends "base.html" %} 
+
+{% block body %} 
+
+<h4>Transmit JSON File to DICE:</h4>
+
+<p></p>
+
+<div>
+    <form role="form" name="transmit" id="transmit" method="POST" action="{{ url_for('vrops_connect') }}">
+            {{ form.submit(class="btn btn-primary center") }}
+    </form>
+</div>
+
+{% endblock %}
