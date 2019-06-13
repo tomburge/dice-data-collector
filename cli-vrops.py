@@ -1,6 +1,6 @@
 import requests
 import json
-import os
+import os, fnmatch
 import platform
 import datetime
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -12,6 +12,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 host = 'vrops.home.lab'
 username = 'admin'
 password = 'Pa$$w0rd'
+customer_id = ''
 
 # resource kinds
 virtual_machines = {}
@@ -25,6 +26,7 @@ vmware_adapter_resouces = {}
 # global dict for objects
 dice_json = {
     'source': 'vrops',
+    "customer_id": " CUST-0001410154",
     'vms': {},
     'hosts': {},
     'clusters':{},
@@ -32,6 +34,16 @@ dice_json = {
     'pgs': {},
     'datastores': {}
     }
+
+def get_list_of_json_files():
+    ''' This function builds a list of JSON files '''
+    listOfFiles = os.listdir('.\\static\\json')
+    pattern = '*.json'
+    json_list = []
+    for files in listOfFiles:  
+        if fnmatch.fnmatch(files, pattern):
+            json_list.append(files)
+    return json_list
 
 def pull_data_from_vrops():
     # ------------------------------------------------------
@@ -257,3 +269,5 @@ dice_file = 'dice_vrops_output_' + str(datetime.date.today()) + '.json'
 
 with open(dice_file, 'w') as j:
     json.dump(dice_json, j, indent=4)
+
+# print(get_list_of_json_files())

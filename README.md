@@ -20,9 +20,9 @@ TODOs
 
 # Quick
 
--Change web layer to Gunicorn/nginx
+-~~Change web layer to Gunicorn~~
 
--Add timestamp to filename
+-~~Add timestamp to filename~~
 
 -Add property collection for other object types
 

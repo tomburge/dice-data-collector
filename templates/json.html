@@ -2,10 +2,80 @@
 
 {% block body %} 
 
-<h4>Here is the link to the completed JSON file:</h4>
+<p></p>
+
+<h4>Here are the links to the completed JSON files:</h4>
 
 <p></p>
 
-<h4><a href="{{ url_for('static', filename='json/dice.json') }}" download>Dice JSON</a></h4>
+<div class="clr-row">
+    <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
+        <div class="card">
+            <div class="card-header">
+                JSON Files (Click to Download)
+            </div>
+            <div class="card-block">
+                <div class="card-text">
+                    <section class="files-block">
+                            <ul class="list">
+                            {% for file in files %}
+                                <div>
+                                    <li><h4><a href="{{ url_for('static', filename='json/' + file) }}" download>{{ file }}</a></h4></li>
+                                </div>    
+                            {% endfor %}
+                            </ul>
+                    </section>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="clr-row">
+        <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
+            <form role="form" name="transmit" id="transmit" method="POST" action="{{ url_for('transmit_data') }}">
+            <div class="card">
+                <div class="card-header">
+                    Send to DICE (Internet Access Required)
+                </div>
+                <div class="card-block">
+                    <div class="card-text">
+                        <section class="form-block">
+                            {{ form.csrf_token }}
+                            <div class="form-group">
+                                {{ form.api_key.label }}
+                                {{ form.api_key(class="clrInput", placeholder="API Key", size="50") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the API Key for your DICE Account</span>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                {{ form.api_secret.label }}
+                                {{ form.api_secret(class="clrInput", placeholder="API Secret", size="50") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the API Secret for your DICE Account</span>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                {{ form.json_file.label }}
+                                {{ form.json_file(class="clrInput", placeholder="JSON Filename", size="50") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the file that you want to transmit.</span>
+                                </a>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="card-footer">
+                        {{ form.submit(class="btn btn-primary center") }}
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
 
 {% endblock %}
