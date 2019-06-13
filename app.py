@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # python standard library imports
 import json
+import datetime
 
 #python flask imports
 from flask import Flask, render_template, redirect, url_for, request, Response
@@ -39,7 +40,8 @@ def vrops_connect():
         vropsuser = request.form.get('vropsuser')
         vropspass = request.form.get('vropspass')
         response = pull_data_from_vrops(vropshost, vropsuser, vropspass)
-        with open('static/json/dice.json', 'w') as j:
+        dice_file = 'dice_vrops_output_' + str(datetime.date.today()) + '.json'
+        with open('static/json/' + dice_file, 'w') as j:
             json.dump(response, j, indent=4)
         return redirect('get-json')
         
