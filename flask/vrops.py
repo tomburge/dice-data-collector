@@ -40,7 +40,7 @@ dice_json = {
 
 def get_list_of_json_files():
     ''' This function builds a list of JSON files '''
-    listOfFiles = os.listdir('./static/json') # Linux
+    listOfFiles = os.listdir('static/json') 
     pattern = '*.json'
     json_list = []
     for files in listOfFiles:  

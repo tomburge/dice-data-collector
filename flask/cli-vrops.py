@@ -9,9 +9,9 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # global auth variables
-host = 'vrops.home.lab'
-username = 'admin'
-password = 'Pa$$w0rd'
+host = input("Enter vROPs FQDN: ")
+username = input("Enter a user that has access to vROPs: ")
+password = input("Enter the password for the specified user: ")
 
 # random vars
 cust_id = 'CUST-1234567890'
@@ -39,7 +39,7 @@ dice_json = {
 
 def get_list_of_json_files():
     ''' This function builds a list of JSON files '''
-    listOfFiles = os.listdir('.\\static\\json')
+    listOfFiles = os.listdir('static/json')
     pattern = '*.json'
     json_list = []
     for files in listOfFiles:  
