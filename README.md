@@ -9,8 +9,7 @@ Current Specs are Flask App running natively.
 To get started:
 
 1. Clone the Repo
-2. CD into the directory and run docker build -t dice-data-collector .
-3. docker run --restart=always --name dice-data-collector -p 80:8000 dice-data-collector
+2. CD into the directory and run docker-compose up --build
 
 or download the OVA from: 
 
