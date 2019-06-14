@@ -40,7 +40,6 @@ dice_json = {
 
 def get_list_of_json_files():
     ''' This function builds a list of JSON files '''
-    # listOfFiles = os.listdir('.\\static\\json') # Windows
     listOfFiles = os.listdir('./static/json') # Linux
     pattern = '*.json'
     json_list = []
@@ -50,6 +49,9 @@ def get_list_of_json_files():
     return json_list
 
 def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
+    pull_data_vrops = 'pull data from vrops was called'
+    with open('pull_data_vrops.log', 'a') as j:
+            json.dump(pull_data_vrops, j, indent=4)
     # ------------------------------------------------------
     # Pulling data from flask form and populating global auth variables
     # ------------------------------------------------------
@@ -263,9 +265,15 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
         populate_datastore()
         populate_datastore_properties()
     # ------------------------------------------------------
+    format = datetime.datetime.now()
     dice_json['customer_id'] = cust_id
-    dice_json['filename'] = 'dice_vrops_output_' + str(datetime.date.today()) + '.json'
+    dice_json['filename'] = 'dice_vrops_output_' + format.strftime("%Y_%m_%d_%H_%M") + '.json'
     # populating global data
     populate_data()
     # ------------------------------------------------------
-    return dice_json
+    # writing JSON
+    dice_file = 'dice_vrops_output_' + format.strftime("%Y_%m_%d_%H_%M") + '.json'
+    with open('static/json/' + dice_file, 'w') as j:
+        json.dump(dice_json, j, indent=4)
+
+    return 'complete'

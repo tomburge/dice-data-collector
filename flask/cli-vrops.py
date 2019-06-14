@@ -12,7 +12,9 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 host = 'vrops.home.lab'
 username = 'admin'
 password = 'Pa$$w0rd'
-customer_id = ''
+
+# random vars
+cust_id = 'CUST-1234567890'
 
 # resource kinds
 virtual_machines = {}
@@ -26,7 +28,7 @@ vmware_adapter_resouces = {}
 # global dict for objects
 dice_json = {
     'source': 'vrops',
-    "customer_id": " CUST-0001410154",
+    "customer_id": cust_id,
     'vms': {},
     'hosts': {},
     'clusters':{},
@@ -258,16 +260,13 @@ def pull_data_from_vrops():
         populate_datastore()
         populate_datastore_properties()
     # ------------------------------------------------------
+    format = datetime.datetime.now()
+    dice_json['filename'] = 'dice_vrops_output_' + format.strftime("%Y_%m_%d_%H_%M") + '.json'
     # populating global data
     populate_data()
-    # ------------------------------------------------------
-    # # return dice_json
 
 pull_data_from_vrops()
 
-dice_file = 'dice_vrops_output_' + str(datetime.date.today()) + '.json'
-
-with open(dice_file, 'w') as j:
+dice_file = 'dice_vrops_output_' + format.strftime("%Y_%m_%d_%H_%M") + '.json'
+with open('static/json/' + dice_file, 'w') as j:
     json.dump(dice_json, j, indent=4)
-
-# print(get_list_of_json_files())

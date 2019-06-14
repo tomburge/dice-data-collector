@@ -1,0 +1,27 @@
+version: "2"
+
+services:
+  flask:
+    build: flask
+    command: "bash ./wrapper.sh"
+    restart: always
+    ports:
+      - "5000:5000"
+    networks:
+      - dice-ddc
+
+  redis:
+    image: 'redis'
+    command: "redis-server"
+    volumes:
+      - redis:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - dice-ddc
+
+volumes:
+    redis:
+
+networks:
+    dice-ddc:

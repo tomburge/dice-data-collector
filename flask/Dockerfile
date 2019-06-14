@@ -1,8 +1,20 @@
 FROM python:alpine3.7
+
+LABEL author="Tom Burge"
+LABEL author_email="tburge@vmware.com"
+
+ENV REDIS_HOST redis
+ENV REDIS_PORT 6379
+
 COPY . /app
 WORKDIR /app
+
+RUN apk update && apk add bash && rm -rf /var/cache/apk/*
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+
 EXPOSE 5000
-CMD python ./app.py
+
+CMD bash ./wrapper.sh
+
 # CMD ["gunicorn", "--workers=2", "--timeout", "1800", "--threads=2", "--worker-class=gthread", "-b", "0.0.0.0:8000", "wsgi"]
