@@ -3,6 +3,7 @@ version: "2"
 services:
   flask:
     build: flask
+    image: tburge/dice-data-collector:latest
     command: "bash ./wrapper.sh"
     restart: always
     ports:

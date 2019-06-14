@@ -24,19 +24,19 @@ TODOs
 
 -~~Add timestamp to filename~~
 
--Add property collection for other object types
+-~~Add property collection for other object types~~
 
 # Not quick
 
 -Add error checking (Any error comes up as Error 500 currently)
 
--Add loading screen while appliance is collecting data
+-~~Add loading screen while appliance is collecting data~~
 
 -Replicate TDM functionality for vCenter
 
 -Investigate collecting telegraf metrics (Tom)
 
--Investigate pushing JSON data to API instead of download (Tom)
+-~~Investigate pushing JSON data to API instead of download~~
 
 -Investigate using appliance to push vrops to vCenter (Tom)
 

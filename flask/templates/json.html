@@ -8,15 +8,16 @@
 
 <p></p>
 
-<div class="clr-row">
-    <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
-        <div class="card">
-            <div class="card-header">
-                JSON Files (Click to Download)
-            </div>
-            <div class="card-block">
-                <div class="card-text">
-                    <section class="files-block">
+<div id="jsonfiles">
+    <div class="clr-row">
+        <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
+            <div class="card">
+                <div class="card-header">
+                    JSON Files (Click to Download) (Files will appear when they have finished.)
+                </div>
+                <div class="card-block">
+                    <div class="card-text">
+                        <section class="files-block">
                             <ul class="list">
                             {% for file in files %}
                                 <div>
@@ -24,8 +25,9 @@
                                 </div>    
                             {% endfor %}
                             </ul>
-                    </section>
-                    <p></p>
+                        </section>
+                        <p></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,5 +79,12 @@
             </form>
         </div>
     </div>
+
+    <script>
+        setInterval("json_file_refresh();",5000); 
+        function json_file_refresh() {
+            $( "#jsonfiles" ).load(location.href + " #jsonfiles" );
+        }
+    </script>
 
 {% endblock %}

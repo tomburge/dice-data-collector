@@ -36,7 +36,7 @@ celery.conf.update(application.config)
 
 # environment config
 env = Environment(application)
-js = Bundle('js/clr-icons.min.js', 'js/clr-icons-api.js','js/clr-icons-element.js', 'js/custom-elements.min.js')
+js = Bundle('js/clr-icons.min.js', 'js/clr-icons-api.js','js/clr-icons-element.js', 'js/custom-elements.min.js', 'js/jquery-3.4.1.min.js')
 env.register('js_all', js)
 css = Bundle('css/clr-ui.min.css', 'css/clr-icons.min.css')
 env.register('css_all', css)
