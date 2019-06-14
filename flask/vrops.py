@@ -49,9 +49,6 @@ def get_list_of_json_files():
     return json_list
 
 def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
-    pull_data_vrops = 'pull data from vrops was called'
-    with open('pull_data_vrops.log', 'a') as j:
-            json.dump(pull_data_vrops, j, indent=4)
     # ------------------------------------------------------
     # Pulling data from flask form and populating global auth variables
     # ------------------------------------------------------

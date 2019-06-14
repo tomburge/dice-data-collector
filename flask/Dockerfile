@@ -17,4 +17,3 @@ EXPOSE 5000
 
 CMD bash ./wrapper.sh
 
-# CMD ["gunicorn", "--workers=2", "--timeout", "1800", "--threads=2", "--worker-class=gthread", "-b", "0.0.0.0:8000", "wsgi"]
