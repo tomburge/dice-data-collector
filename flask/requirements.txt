@@ -1,0 +1,7 @@
+celery==4.3.0
+Flask==1.0.3
+Flask-Assets==0.12
+Flask-WTF==0.14.2
+gunicorn==19.9.0
+redis==3.2.1
+requests==2.22.0

@@ -1,0 +1,9 @@
+# virtualenv
+flask-docker
+
+# vscode stuff
+.vscode
+
+# python ignore
+*.pyc
+__pycache__
