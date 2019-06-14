@@ -11,3 +11,4 @@ gunicorn --workers=2 --timeout=1800 --threads=2 --worker-class=gthread -b 0.0.0.
 
 # Start the celery worker
 celery -A app.celery worker --loglevel=info
+
