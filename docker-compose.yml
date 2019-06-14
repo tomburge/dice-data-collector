@@ -7,13 +7,14 @@ services:
     command: "bash ./wrapper.sh"
     restart: always
     ports:
-      - "5000:5000"
+      - "80:5000"
     networks:
       - dice-ddc
 
   redis:
     image: 'redis'
     command: "redis-server"
+    restart: always
     volumes:
       - redis:/data
     ports:
