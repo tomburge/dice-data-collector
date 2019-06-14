@@ -11,7 +11,7 @@ gunicorn==19.9.0
 idna==2.8
 itsdangerous==1.1.0
 Jinja2==2.10.1
-kombu==4.6.2
+kombu==4.6.1
 MarkupSafe==1.1.1
 pytz==2019.1
 redis==3.2.1
