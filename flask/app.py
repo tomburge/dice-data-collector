@@ -62,6 +62,13 @@ def call_vrops_connect(vropshost, vropsuser, vropspass, customer_id):
     cust_id = customer_id
     pull_data_from_vrops(vhost, vuser, vpass, cust_id)
 
+@celery.task(name='push.to.dice')
+def transmit_to_dice(api_key, api_secret, json_file):
+    api_key = api_key
+    api_secret = api_secret
+    json_file = json_file
+    dice_transmit(api_secret, api_secret, json_file)
+
 @celery.task(name='call.test.call')
 def test_call():
     test_call = 'test_call was called\n'
@@ -101,7 +108,8 @@ def transmit_data():
         api_key = request.form.get('api_key')
         api_secret = request.form.get('api_secret')
         json_file = request.form.get('json_file')
-        response = dice_transmit(api_secret, api_secret, json_file)
+        # dice_transmit(api_secret, api_secret, json_file)
+        celery.send_task('push.to.dice', args=(api_key, api_secret, json_file))
     return redirect('get-json')
 
 @application.route("/about")

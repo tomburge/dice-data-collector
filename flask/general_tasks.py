@@ -24,3 +24,13 @@ def dice_transmit(api_key, api_secret, json_file):
     response = requests.request("POST", url=url, headers=headers, auth=auth_values, data=json.dumps(json_payload), verify=False)
 
     return response
+
+def get_list_of_json_files():
+    ''' This function builds a list of JSON files '''
+    listOfFiles = os.listdir('static/json')
+    pattern = '*.json'
+    json_list = []
+    for files in listOfFiles:  
+        if fnmatch.fnmatch(files, pattern):
+            json_list.append(files)
+    return json_list
