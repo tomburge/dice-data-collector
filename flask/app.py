@@ -42,9 +42,9 @@ css = Bundle('css/clr-ui.min.css', 'css/clr-icons.min.css')
 env.register('css_all', css)
 
 class LoginForm(FlaskForm):
-    vropshost = StringField('vROPs Address:', validators=[InputRequired(), DataRequired()])
-    vropsuser = StringField('vROPs Username: ', validators=[InputRequired(), DataRequired()])
-    vropspass = PasswordField('vROPs Password: ', validators=[InputRequired(), DataRequired()])
+    host = StringField('Host Address:', validators=[InputRequired(), DataRequired()])
+    user = StringField('Username: ', validators=[InputRequired(), DataRequired()])
+    pwd = PasswordField('Password: ', validators=[InputRequired(), DataRequired()])
     customer_id = StringField('Customer ID', validators=[InputRequired(), DataRequired()])
     submit = SubmitField('Submit')
 
@@ -62,6 +62,14 @@ def call_vrops_connect(vropshost, vropsuser, vropspass, customer_id):
     cust_id = customer_id
     pull_data_from_vrops(vhost, vuser, vpass, cust_id)
 
+@celery.task(name='call.vcenter.connect')
+def call_vrops_connect(vcenterhost, vcenteruser, vcenterpass, customer_id):
+    vhost = vcenterhost
+    vuser = vcenteruser
+    vpass = vcenterpass
+    cust_id = customer_id
+    # pull_data_from_vcenter(vhost, vuser, vpass, cust_id)
+
 @celery.task(name='push.to.dice')
 def transmit_to_dice(api_key, api_secret, json_file):
     api_key = api_key
@@ -77,17 +85,28 @@ def test_call():
 
 @application.route("/", methods=['GET'])
 def index():
-    form = LoginForm()
-    return render_template('index.html', form=form)
+    vrops_form = LoginForm()
+    vcenter_form = LoginForm()
+    return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form)
 
 @application.route("/vrops-connect", methods=["GET","POST"])
 def vrops_connect():
     if request.method == "POST":
-        vropshost = request.form.get('vropshost')
-        vropsuser = request.form.get('vropsuser')
-        vropspass = request.form.get('vropspass')
+        vropshost = request.form.get('host')
+        vropsuser = request.form.get('user')
+        vropspass = request.form.get('pwd')
         customer_id = request.form.get('customer_id')
         celery.send_task('call.vrops.connect', args=(vropshost, vropsuser, vropspass, customer_id))
+        return redirect('get-json')
+
+@application.route("/vcenter-connect", methods=["GET","POST"])
+def vcenter_connect():
+    if request.method == "POST":
+        vcenterhost = request.form.get('host')
+        vcenteruser = request.form.get('user')
+        vcenterpass = request.form.get('pwd')
+        customer_id = request.form.get('customer_id')
+        celery.send_task('call.venter.connect', args=(vcenterhost, vcenteruser, vcenterpass, customer_id))
         return redirect('get-json')
 
 @application.route("/example")
@@ -108,7 +127,6 @@ def transmit_data():
         api_key = request.form.get('api_key')
         api_secret = request.form.get('api_secret')
         json_file = request.form.get('json_file')
-        # dice_transmit(api_secret, api_secret, json_file)
         celery.send_task('push.to.dice', args=(api_key, api_secret, json_file))
     return redirect('get-json')
 

@@ -89,7 +89,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-dicecollector
 dice-flask
 
 # Spyder project settings
@@ -108,4 +107,3 @@ dice-flask
 # vscode stuff
 .vscode/
 dice-data-collector.tar
-flask/dice_vrops_output_2019_06_14_22_00.json

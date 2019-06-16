@@ -69,30 +69,41 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
     # setting auth values
     auth_values = (username, password)
     # ------------------------------------------------------
-    def get_vmware_adapter_resources():
-        """ This functions builds a full list of resources in vRealize Operations by type VMware adapter. """
+    def get_vmware_adapter_resources(page, pageSize):
+        """ This functions builds a list of resources in vRealize Operations by type VMware adapter. """
+        page = str(page)
+        pageSize = str(pageSize)
         headers = {'Accept': 'application/json'}
-        new_url = vrops_url + '/adapterkinds/VMWARE/resources'
+        new_url = vrops_url + '/adapterkinds/VMWARE/resources' + '?page=' + page + '&' + 'pageSize=' + pageSize
         response = requests.request("GET", url=new_url, headers=headers, auth=auth_values, verify=False)
         return response.text
     # ------------------------------------------------------
-    vmware_adapter_resouces = json.loads(get_vmware_adapter_resources())
+    # building global resource list
+    def build_global_resource_list():
+        i = 0
+        rslist_len = 1
+        while rslist_len != 0:
+            testing = json.loads(get_vmware_adapter_resources(i, 1000))
+            rslist_len = len(testing['resourceList'])
+            vmware_adapter_resouces.update({i : testing})
+            i = i + 1
     # ------------------------------------------------------
     def populate_global_variables():
         """ This function populates global variables for resource kinds. """
-        for i in vmware_adapter_resouces['resourceList']:
-            if i['resourceKey']['resourceKindKey'] == 'VirtualMachine':
-                virtual_machines.update({i['identifier'] : i['resourceKey']['name']})
-            if i['resourceKey']['resourceKindKey'] == 'HostSystem':
-                host_systems.update({i['identifier'] : i['resourceKey']['name']})
-            if i['resourceKey']['resourceKindKey'] == 'ClusterComputeResource':
-                host_clusters.update({i['identifier'] : i['resourceKey']['name']})
-            if i['resourceKey']['resourceKindKey'] == 'VmwareDistributedVirtualSwitch':
-                vmware_dvs.update({i['identifier'] : i['resourceKey']['name']})
-            if i['resourceKey']['resourceKindKey'] == 'DistributedVirtualPortgroup':
-                dvs_portgroups.update({i['identifier'] : i['resourceKey']['name']})
-            if i['resourceKey']['resourceKindKey'] == 'Datastore':
-                datastore.update({i['identifier'] : i['resourceKey']['name']})
+        for p in vmware_adapter_resouces:
+            for i in vmware_adapter_resouces[p]['resourceList']:
+                if i['resourceKey']['resourceKindKey'] == 'VirtualMachine':
+                    virtual_machines.update({i['identifier'] : i['resourceKey']['name']})
+                if i['resourceKey']['resourceKindKey'] == 'HostSystem':
+                    host_systems.update({i['identifier'] : i['resourceKey']['name']})
+                if i['resourceKey']['resourceKindKey'] == 'ClusterComputeResource':
+                    host_clusters.update({i['identifier'] : i['resourceKey']['name']})
+                if i['resourceKey']['resourceKindKey'] == 'VmwareDistributedVirtualSwitch':
+                    vmware_dvs.update({i['identifier'] : i['resourceKey']['name']})
+                if i['resourceKey']['resourceKindKey'] == 'DistributedVirtualPortgroup':
+                    dvs_portgroups.update({i['identifier'] : i['resourceKey']['name']})
+                if i['resourceKey']['resourceKindKey'] == 'Datastore':
+                    datastore.update({i['identifier'] : i['resourceKey']['name']})
     # ------------------------------------------------------
     def get_resource_latest_stats(ident):
         """ This function retrieves a full list of the latest stats for an object in vRealize Operations. """
@@ -246,6 +257,7 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
     # ------------------------------------------------------
     # calls all populate functions
     def populate_data():
+        build_global_resource_list()
         populate_global_variables()
         populate_virtual_machine()
         populate_virtual_machine_properties()
@@ -262,14 +274,14 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
         populate_datastore()
         populate_datastore_properties()
     # ------------------------------------------------------
-    format = datetime.datetime.now()
+    formatting = datetime.datetime.now()
     dice_json['customer_id'] = cust_id
-    dice_json['filename'] = 'dice_vrops_output_' + format.strftime("%Y_%m_%d_%H_%M") + '.json'
+    dice_json['filename'] = 'dice_vrops_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
     # populating global data
     populate_data()
     # ------------------------------------------------------
     # writing JSON
-    dice_file = 'dice_vrops_output_' + format.strftime("%Y_%m_%d_%H_%M") + '.json'
+    dice_file = 'dice_vrops_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
     with open('static/json/' + dice_file, 'w') as j:
         json.dump(dice_json, j, indent=4)
 

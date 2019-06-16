@@ -89,7 +89,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-dicecollector
 dice-flask
 
 # Spyder project settings
@@ -107,4 +106,3 @@ dice-flask
 
 # vscode stuff
 .vscode/
-dice-data-collector.tar
