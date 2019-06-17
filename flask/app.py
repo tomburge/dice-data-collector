@@ -63,7 +63,7 @@ def call_vrops_connect(vropshost, vropsuser, vropspass, customer_id):
     pull_data_from_vrops(vhost, vuser, vpass, cust_id)
 
 @celery.task(name='call.vcenter.connect')
-def call_vrops_connect(vcenterhost, vcenteruser, vcenterpass, customer_id):
+def call_vcenter_connect(vcenterhost, vcenteruser, vcenterpass, customer_id):
     vhost = vcenterhost
     vuser = vcenteruser
     vpass = vcenterpass
@@ -75,7 +75,7 @@ def transmit_to_dice(api_key, api_secret, json_file):
     api_key = api_key
     api_secret = api_secret
     json_file = json_file
-    dice_transmit(api_secret, api_secret, json_file)
+    dice_transmit(api_key, api_secret, json_file)
 
 @celery.task(name='call.test.call')
 def test_call():

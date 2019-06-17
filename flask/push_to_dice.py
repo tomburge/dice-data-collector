@@ -7,9 +7,9 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 def dice_transmit(api_key, api_secret, json_file):
-    api_key = api_key # 
-    api_secret = api_secret # 
-    json_file = json_file # 'dice_vrops_output_2019_06_14_22_00.json'
+    api_key = api_key
+    api_secret = api_secret
+    json_file = json_file
     auth_values = (api_key, api_secret)
     url = "https://www.dicevm.com/api/businessmodel/json"
     headers = {
