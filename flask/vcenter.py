@@ -7,13 +7,13 @@ from pyVmomi import vim
 import vc_info as info
 
 # global auth vars
-host = ''
-user = ''
-pwd = ''
-port = 443
+# host = ''
+# user = ''
+# pwd = ''
+# port = 443
 
 # other global vars
-cust_id = ''
+# cust_id = ''
 
 # global dict for objects
 dice_json = {
@@ -23,11 +23,12 @@ dice_json = {
     'filename': '',
     'vms': {},
     'hosts': {},
-    'clusters':{},
+    'clusters': {},
     'dvs': {},
     'pgs': {},
     'datastores': {}
     }
+
 
 def pull_data_from_vcenter(vchost, vcuser, vcpass, customer_id):
     # ------------------------------------------------------
@@ -36,6 +37,7 @@ def pull_data_from_vcenter(vchost, vcuser, vcpass, customer_id):
     host = vchost
     user = vcuser
     pwd = vcpass
+    port = 443
     cust_id = customer_id
     
     # ssl context setting
@@ -45,7 +47,7 @@ def pull_data_from_vcenter(vchost, vcuser, vcpass, customer_id):
     # connect service instance
     service_instance = connect.SmartConnect(host=host, user=user, pwd=pwd, port=int(port), sslContext=context)
     content = service_instance.RetrieveContent()
-    object_view = content.viewManager.CreateContainerView(content.rootFolder,[], True)
+    object_view = content.viewManager.CreateContainerView(content.rootFolder, [], True)
 
     for obj in object_view.view:
         if isinstance(obj, vim.VirtualMachine):

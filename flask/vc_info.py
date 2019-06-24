@@ -5,9 +5,9 @@ def get_vm_info(vm, depth=1, max_depth=20):
     if hasattr(vm, 'childEntity'):
         if depth > max_depth:
             return
-        vmList = vm.childEntity
-        for c in vmList:
-          get_vm_info(c, depth + 1)
+        vmlist = vm.childEntity
+        for c in vmlist:
+            get_vm_info(c, depth + 1)
         return
 
     config = vm.config
@@ -20,7 +20,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
 
     for i in config.extraConfig:
         if i.key == 'machine.id':
-           vmtype = 'vdi' 
+            vmtype = 'vdi'
 
     vm_obj = {}
 
@@ -71,8 +71,8 @@ def get_host_info(host, depth=1, max_depth=20):
     if hasattr(host, 'childEntity'):
         if depth > max_depth:
             return
-        vmList = host.childEntity
-        for c in vmList:
+        vmlist = host.childEntity
+        for c in vmlist:
             get_host_info(c, depth + 1)
         return
 
@@ -127,8 +127,8 @@ def get_cluster_info(cluster, depth=1, max_depth=10):
     if hasattr(cluster, 'childEntity'):
         if depth > max_depth:
             return
-        vmList = cluster.childEntity
-        for c in vmList:
+        vmlist = cluster.childEntity
+        for c in vmlist:
             get_ds_info(c, depth + 1)
         return
 
@@ -183,8 +183,8 @@ def get_ds_info(ds, depth=1, max_depth=10):
     if hasattr(ds, 'childEntity'):
         if depth > max_depth:
             return
-        vmList = ds.childEntity
-        for c in vmList:
+        vmlist = ds.childEntity
+        for c in vmlist:
             get_ds_info(c, depth + 1)
         return
 
@@ -214,8 +214,8 @@ def get_net_info(net, depth=1, max_depth=10):
     if hasattr(net, 'childEntity'):
         if depth > max_depth:
             return
-        vmList = net.childEntity
-        for c in vmList:
+        vmlist = net.childEntity
+        for c in vmlist:
             get_net_info(c, depth + 1)
         return
 
@@ -244,8 +244,8 @@ def get_pg_info(pg, depth=1, max_depth=10):
     if hasattr(pg, 'childEntity'):
         if depth > max_depth:
             return
-        vmList = pg.childEntity
-        for c in vmList:
+        vmlist = pg.childEntity
+        for c in vmlist:
             get_net_info(c, depth + 1)
         return
 

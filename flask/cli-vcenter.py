@@ -18,7 +18,7 @@ context.verify_mode = ssl.CERT_NONE
 # connect service instance
 service_instance = connect.SmartConnect(host=host, user=user, pwd=pwd, port=int(port), sslContext=context)
 content = service_instance.RetrieveContent()
-object_view = content.viewManager.CreateContainerView(content.rootFolder,[], True)
+object_view = content.viewManager.CreateContainerView(content.rootFolder, [], True)
 
 # global dict for objects
 dice_json = {
@@ -26,7 +26,7 @@ dice_json = {
     'vcenter': host,
     'vms': {},
     'hosts': {},
-    'clusters':{},
+    'clusters': {},
     'dvs': {},
     'pgs': {},
     'datastores': {}

@@ -1,7 +1,5 @@
 import requests
 import json
-import os, fnmatch
-import platform
 import datetime
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
@@ -15,6 +13,7 @@ password = input("Enter the password for the specified user: ")
 
 # random vars
 cust_id = 'CUST-1234567890'
+formatting = datetime.datetime.now()
 
 # resource kinds
 virtual_machines = {}
@@ -28,24 +27,16 @@ vmware_adapter_resources = {}
 # global dict for objects
 dice_json = {
     'source': 'vrops',
+    'vrops': host,
     "customer_id": cust_id,
     'vms': {},
     'hosts': {},
-    'clusters':{},
+    'clusters': {},
     'dvs': {},
     'pgs': {},
     'datastores': {}
     }
 
-def get_list_of_json_files():
-    ''' This function builds a list of JSON files '''
-    listOfFiles = os.listdir('static/json')
-    pattern = '*.json'
-    json_list = []
-    for files in listOfFiles:  
-        if fnmatch.fnmatch(files, pattern):
-            json_list.append(files)
-    return json_list
 
 def pull_data_from_vrops():
     # formatting vROPS API URL
@@ -60,66 +51,73 @@ def pull_data_from_vrops():
     # setting auth values
     auth_values = (username, password)
     # ------------------------------------------------------
-    def get_vmware_adapter_resources(page, pageSize):
+
+    def get_vmware_adapter_resources(page, pagesize):
         """ This functions builds a list of resources in vRealize Operations by type VMware adapter. """
         page = str(page)
-        pageSize = str(pageSize)
+        pagesize = str(pagesize)
         headers = {'Accept': 'application/json'}
-        new_url = vrops_url + '/adapterkinds/VMWARE/resources' + '?page=' + page + '&' + 'pageSize=' + pageSize
+        new_url = vrops_url + '/adapterkinds/VMWARE/resources' + '?page=' + page + '&' + 'pageSize=' + pagesize
         response = requests.request("GET", url=new_url, headers=headers, auth=auth_values, verify=False)
         return response.text
     # ------------------------------------------------------
     # building global resource list
+
     def build_global_resource_list():
         i = 0
         rslist_len = 1
         while rslist_len != 0:
             testing = json.loads(get_vmware_adapter_resources(i, 1000))
             rslist_len = len(testing['resourceList'])
-            vmware_adapter_resouces.update({i : testing})
+            vmware_adapter_resources.update({i: testing})
             i = i + 1
     # ------------------------------------------------------
+
     def populate_global_variables():
         """ This function populates global variables for resource kinds. """
         for p in vmware_adapter_resources:
             for i in vmware_adapter_resources[p]['resourceList']:
                 if i['resourceKey']['resourceKindKey'] == 'VirtualMachine':
-                    virtual_machines.update({i['identifier'] : i['resourceKey']['name']})
+                    virtual_machines.update({i['identifier']: i['resourceKey']['name']})
                 if i['resourceKey']['resourceKindKey'] == 'HostSystem':
-                    host_systems.update({i['identifier'] : i['resourceKey']['name']})
+                    host_systems.update({i['identifier']: i['resourceKey']['name']})
                 if i['resourceKey']['resourceKindKey'] == 'ClusterComputeResource':
-                    host_clusters.update({i['identifier'] : i['resourceKey']['name']})
+                    host_clusters.update({i['identifier']: i['resourceKey']['name']})
                 if i['resourceKey']['resourceKindKey'] == 'VmwareDistributedVirtualSwitch':
-                    vmware_dvs.update({i['identifier'] : i['resourceKey']['name']})
+                    vmware_dvs.update({i['identifier']: i['resourceKey']['name']})
                 if i['resourceKey']['resourceKindKey'] == 'DistributedVirtualPortgroup':
-                    dvs_portgroups.update({i['identifier'] : i['resourceKey']['name']})
+                    dvs_portgroups.update({i['identifier']: i['resourceKey']['name']})
                 if i['resourceKey']['resourceKindKey'] == 'Datastore':
-                    datastore.update({i['identifier'] : i['resourceKey']['name']})
+                    datastore.update({i['identifier']: i['resourceKey']['name']})
     # ------------------------------------------------------
+
     def get_resource_latest_stats(ident):
         """ This function retrieves a full list of the latest stats for an object in vRealize Operations. """
         headers = {'Accept': 'application/json'}
-        identity = ident
+        ident = ident
         new_url = vrops_url + '/resources/' + ident + '/stats/latest'
         response = requests.request("GET", url=new_url, headers=headers, auth=auth_values, verify=False)
         return response.text
     # ------------------------------------------------------
+
     def get_res_properties(ident):
         """ This function retrieves a full list of the latest stats for an object in vRealize Operations. """
         headers = {'Accept': 'application/json'}
-        identity = ident
+        ident = ident
         new_url = vrops_url + '/resources/' + ident + '/properties'
         response = requests.request("GET", url=new_url, headers=headers, auth=auth_values, verify=False)
         return response.text
     # ------------------------------------------------------
+
     def get_res_parent(ident):
         """ This function retrieves the parent for an object in vRealize Operations. """
         headers = {'Accept': 'application/json'}
-        identity = ident
+        ident = ident
         new_url = vrops_url + '/resources/' + ident + '/relationships/parents'
         response = requests.request("GET", new_url, headers=headers, auth=auth_values, verify=False)
         return response.text
     # ------------------------------------------------------
+
     def populate_virtual_machine():
         for k in virtual_machines:
             stats = json.loads(get_resource_latest_stats(k))
@@ -130,6 +128,7 @@ def pull_data_from_vrops():
                     value = e['data'][0]
                     dice_json['vms'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_virtual_machine_properties():
         for k in virtual_machines:
             properties = json.loads(get_res_properties(k))
@@ -138,6 +137,7 @@ def pull_data_from_vrops():
                 value = p['value']
                 dice_json['vms'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_host_system():
         for k in host_systems:
             stats = json.loads(get_resource_latest_stats(k))
@@ -148,6 +148,7 @@ def pull_data_from_vrops():
                     value = e['data'][0]
                     dice_json['hosts'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_host_system_properties():
         for k in host_systems:
             properties = json.loads(get_res_properties(k))
@@ -156,6 +157,7 @@ def pull_data_from_vrops():
                 value = p['value']
                 dice_json['hosts'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_host_cluster():
         for k in host_clusters:
             stats = json.loads(get_resource_latest_stats(k))
@@ -166,6 +168,7 @@ def pull_data_from_vrops():
                     value = e['data'][0]
                     dice_json['clusters'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_host_cluster_properties():
         for k in host_clusters:
             properties = json.loads(get_res_properties(k))
@@ -174,6 +177,7 @@ def pull_data_from_vrops():
                 value = p['value']
                 dice_json['clusters'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_vmware_dvs():
         for k in vmware_dvs:
             stats = json.loads(get_resource_latest_stats(k))
@@ -184,6 +188,7 @@ def pull_data_from_vrops():
                     value = e['data'][0]
                     dice_json['dvs'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_vmware_dvs_properties():
         for k in vmware_dvs:
             properties = json.loads(get_res_properties(k))
@@ -192,6 +197,7 @@ def pull_data_from_vrops():
                 value = p['value']
                 dice_json['dvs'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_vmware_dvs_parents():
         for k in vmware_dvs:
             parent = json.loads(get_res_parent(k))
@@ -201,6 +207,7 @@ def pull_data_from_vrops():
                     value = p['resourceKey']['name']
                     dice_json['dvs'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_dvs_portgroups():
         for k in dvs_portgroups:
             stats = json.loads(get_resource_latest_stats(k))
@@ -211,6 +218,7 @@ def pull_data_from_vrops():
                     value = e['data'][0]
                     dice_json['pgs'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_dvs_portgroups_properties():
         for k in dvs_portgroups:
             properties = json.loads(get_res_properties(k))
@@ -219,6 +227,7 @@ def pull_data_from_vrops():
                 value = p['value']
                 dice_json['pgs'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_dvs_portgroups_parents():
         for k in dvs_portgroups:
             parent = json.loads(get_res_parent(k))
@@ -228,6 +237,7 @@ def pull_data_from_vrops():
                     value = p['resourceKey']['name']
                     dice_json['pgs'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_datastore():
         for k in datastore:
             stats = json.loads(get_resource_latest_stats(k))
@@ -238,6 +248,7 @@ def pull_data_from_vrops():
                     value = e['data'][0]
                     dice_json['datastores'][k].update({key: value})
     # ------------------------------------------------------
+
     def populate_datastore_properties():
         for k in datastore:
             properties = json.loads(get_res_properties(k))
@@ -247,13 +258,14 @@ def pull_data_from_vrops():
                 dice_json['datastores'][k].update({key: value})
     # ------------------------------------------------------
     # calls all populate functions
+
     def populate_data():
         build_global_resource_list()
         populate_global_variables()
 
         # create debug file for the global vmware adapter resources variable
-        with open('resources_debug.json', 'w') as j:
-            json.dump(vmware_adapter_resources, j, indent=4)
+        with open('resources_debug.json', 'w') as jw:
+            json.dump(vmware_adapter_resources, jw, indent=4)
 
         populate_virtual_machine()
         populate_virtual_machine_properties()
@@ -270,14 +282,14 @@ def pull_data_from_vrops():
         populate_datastore()
         populate_datastore_properties()
     # ------------------------------------------------------
-    formatting = datetime.datetime.now()
+
     dice_json['filename'] = 'dice_vrops_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
     # populating global data
     populate_data()
 
+
 pull_data_from_vrops()
 
-formatting = datetime.datetime.now()
 dice_file = 'dice_vrops_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
 with open('static/json/' + dice_file, 'w') as j:
     json.dump(dice_json, j, indent=4)
