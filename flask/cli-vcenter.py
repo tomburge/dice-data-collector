@@ -1,11 +1,13 @@
 import ssl
 import json
+import datetime
 from pyVim import connect
 from pyVmomi import vmodl
 from pyVmomi import vim
 import vc_info as info
 
 # global auth vars
+cust_id = 'CUST-1234567890'  # input('Please enter a customer ID: ')
 host = input('Enter the vCenter FQDN: ')
 user = input('Enter the username for vCenter: ')
 pwd = input('Enter the password for the user: ')
@@ -24,6 +26,8 @@ object_view = content.viewManager.CreateContainerView(content.rootFolder, [], Tr
 dice_json = {
     'source': 'vcenter',
     'vcenter': host,
+    'customer_id': cust_id,
+    'filename': '',
     'vms': {},
     'hosts': {},
     'clusters': {},
@@ -31,6 +35,9 @@ dice_json = {
     'pgs': {},
     'datastores': {}
     }
+
+formatting = datetime.datetime.now()
+
 
 for obj in object_view.view:
     if isinstance(obj, vim.VirtualMachine):
@@ -52,5 +59,8 @@ for obj in object_view.view:
         pg_obj = info.get_pg_info(obj)
         dice_json['pgs'].update(pg_obj)
 
-with open('dice_vcenter.json', 'w') as j:
+dice_json['filename'] = 'dice_vc_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
+
+dice_file = 'dice_vc_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
+with open('static/json/' + dice_file, 'w') as j:
     json.dump(dice_json, j, indent=4)

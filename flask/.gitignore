@@ -106,6 +106,7 @@ dice-flask/
 
 # vscode stuff
 .vscode/
+.idea/
 
 # random
 old code/

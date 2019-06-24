@@ -6,15 +6,6 @@ from pyVmomi import vmodl
 from pyVmomi import vim
 import vc_info as info
 
-# global auth vars
-# host = ''
-# user = ''
-# pwd = ''
-# port = 443
-
-# other global vars
-# cust_id = ''
-
 # global dict for objects
 dice_json = {
     'source': 'vcenter',

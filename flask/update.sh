@@ -1,4 +1,5 @@
 #!/bin/bash
+# this script updates the appliance from github
 cd
 cd dice-data-collector
 docker-compose down

@@ -117,6 +117,14 @@ def pull_data_from_vrops():
         response = requests.request("GET", new_url, headers=headers, auth=auth_values, verify=False)
         return response.text
     # ------------------------------------------------------
+    # merge the many similar functions below this block into common functions
+    def populate_object_data():
+        pass
+    def populate_object_properties():
+        pass
+    def populate_object_parents():
+        pass
+    # ------------------------------------------------------
 
     def populate_virtual_machine():
         for k in virtual_machines:

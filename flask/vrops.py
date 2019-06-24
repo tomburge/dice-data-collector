@@ -8,14 +8,6 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 # disable ssl warnings for self signed certs
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-# global auth variables
-# host = ''
-# username = ''
-# password = ''
-
-# other global vars
-# cust_id = ''
-
 # resource kinds
 virtual_machines = {}
 host_systems = {}
@@ -38,16 +30,6 @@ dice_json = {
     'pgs': {},
     'datastores': {}
     }
-
-# def get_list_of_json_files():
-#     ''' This function builds a list of JSON files '''
-#     listOfFiles = os.listdir('static/json') 
-#     pattern = '*.json'
-#     json_list = []
-#     for files in listOfFiles:  
-#         if fnmatch.fnmatch(files, pattern):
-#             json_list.append(files)
-#     return json_list
 
 
 def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
@@ -137,6 +119,14 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
         new_url = vrops_url + '/resources/' + ident + '/relationships/parents'
         response = requests.request("GET", new_url, headers=headers, auth=auth_values, verify=False)
         return response.text
+    # ------------------------------------------------------
+    # merge the many similar functions below this block into common functions
+    def populate_object_data():
+        pass
+    def populate_object_properties():
+        pass
+    def populate_object_parents():
+        pass
     # ------------------------------------------------------
 
     def populate_virtual_machine():
