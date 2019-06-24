@@ -106,4 +106,5 @@ dice-flask
 
 # vscode stuff
 .vscode/
+.idea/
 dice-data-collector.tar
