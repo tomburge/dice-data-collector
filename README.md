@@ -17,7 +17,19 @@ https://onevmw-my.sharepoint.com/:f:/g/personal/tburge_vmware_com/EnVAcMX3T75Cg3
 
 TODOs
 
-# Quick
+# Tasks
+
+-Add error checking (Any error comes up as Error 500 currently)
+
+-Add Test Connection functionality
+
+-Add Timer for execution
+
+-Replicate TDM functionality for vCenter
+
+-Investigate collecting telegraf metrics (Tom)
+
+-Investigate using appliance to push vrops to vCenter (Tom)
 
 -~~Change web layer to Gunicorn~~
 
@@ -25,19 +37,9 @@ TODOs
 
 -~~Add property collection for other object types~~
 
-# Not quick
-
--Add error checking (Any error comes up as Error 500 currently)
-
 -~~Add loading screen while appliance is collecting data~~
 
--Replicate TDM functionality for vCenter
-
--Investigate collecting telegraf metrics (Tom)
-
 -~~Investigate pushing JSON data to API instead of download~~
-
--Investigate using appliance to push vrops to vCenter (Tom)
 
 # Adds by the team
 
