@@ -23,7 +23,7 @@ host_clusters = {}
 vmware_dvs = {}
 dvs_portgroups = {}
 datastore = {}
-vmware_adapter_resouces = {}
+vmware_adapter_resources = {}
 
 # global dict for objects
 dice_json = {
@@ -81,8 +81,8 @@ def pull_data_from_vrops():
     # ------------------------------------------------------
     def populate_global_variables():
         """ This function populates global variables for resource kinds. """
-        for p in vmware_adapter_resouces:
-            for i in vmware_adapter_resouces[p]['resourceList']:
+        for p in vmware_adapter_resources:
+            for i in vmware_adapter_resources[p]['resourceList']:
                 if i['resourceKey']['resourceKindKey'] == 'VirtualMachine':
                     virtual_machines.update({i['identifier'] : i['resourceKey']['name']})
                 if i['resourceKey']['resourceKindKey'] == 'HostSystem':
@@ -250,6 +250,11 @@ def pull_data_from_vrops():
     def populate_data():
         build_global_resource_list()
         populate_global_variables()
+
+        # create debug file for the global vmware adapter resources variable
+        with open('resources_debug.json', 'w') as j:
+            json.dump(vmware_adapter_resources, j, indent=4)
+
         populate_virtual_machine()
         populate_virtual_machine_properties()
         populate_host_system()

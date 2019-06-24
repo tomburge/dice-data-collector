@@ -1,9 +1,7 @@
-#!/usr/bin/env python
 # python standard library imports
-import json
-import datetime
+import json, datetime
 
-#python flask imports
+# python flask imports
 from flask import Flask, render_template, redirect, url_for, request, Response
 from flask_assets import Bundle, Environment
 from flask_wtf import FlaskForm
@@ -11,13 +9,13 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, InputRequired
 from celery import Celery, task
 
-# my imports
-from vrops import pull_data_from_vrops, get_list_of_json_files
-from push_to_dice import dice_transmit
+# app imports
+from vrops import pull_data_from_vrops
+from vcenter import pull_data_from_vcenter
+from general_tasks import dice_transmit, get_list_of_json_files
 import config
 
 # ---------------------------------------------------------------------------------
-
 # initialize flask app
 application = Flask(__name__)
 application.config['SECRET_KEY'] = 'supersecretkey'
@@ -32,7 +30,6 @@ celery = Celery(
     broker=application.config['CELERY_BROKER_URL']
 )
 celery.conf.update(application.config)
-
 
 # environment config
 env = Environment(application)
@@ -68,7 +65,7 @@ def call_vcenter_connect(vcenterhost, vcenteruser, vcenterpass, customer_id):
     vuser = vcenteruser
     vpass = vcenterpass
     cust_id = customer_id
-    # pull_data_from_vcenter(vhost, vuser, vpass, cust_id)
+    pull_data_from_vcenter(vhost, vuser, vpass, cust_id)
 
 @celery.task(name='push.to.dice')
 def transmit_to_dice(api_key, api_secret, json_file):
@@ -102,11 +99,11 @@ def vrops_connect():
 @application.route("/vcenter-connect", methods=["GET","POST"])
 def vcenter_connect():
     if request.method == "POST":
-        vcenterhost = request.form.get('host')
-        vcenteruser = request.form.get('user')
-        vcenterpass = request.form.get('pwd')
+        vchost = request.form.get('host')
+        vcuser = request.form.get('user')
+        vcpass = request.form.get('pwd')
         customer_id = request.form.get('customer_id')
-        celery.send_task('call.venter.connect', args=(vcenterhost, vcenteruser, vcenterpass, customer_id))
+        celery.send_task('call.vcenter.connect', args=(vchost, vcuser, vcpass, customer_id))
         return redirect('get-json')
 
 @application.route("/example")

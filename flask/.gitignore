@@ -89,7 +89,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-dice-flask
+dice-flask/
 
 # Spyder project settings
 .spyderproject
@@ -106,3 +106,6 @@ dice-flask
 
 # vscode stuff
 .vscode/
+
+# random
+old code/

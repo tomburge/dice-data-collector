@@ -13,7 +13,7 @@ host = ''
 username = ''
 password = ''
 
-# random vars
+# other global vars
 cust_id = ''
 
 # resource kinds
@@ -28,6 +28,7 @@ vmware_adapter_resouces = {}
 # global dict for objects
 dice_json = {
     'source': 'vrops',
+    'vrops': '',
     'customer_id': '',
     'filename': '',
     'vms': {},
@@ -38,15 +39,15 @@ dice_json = {
     'datastores': {}
     }
 
-def get_list_of_json_files():
-    ''' This function builds a list of JSON files '''
-    listOfFiles = os.listdir('static/json') 
-    pattern = '*.json'
-    json_list = []
-    for files in listOfFiles:  
-        if fnmatch.fnmatch(files, pattern):
-            json_list.append(files)
-    return json_list
+# def get_list_of_json_files():
+#     ''' This function builds a list of JSON files '''
+#     listOfFiles = os.listdir('static/json') 
+#     pattern = '*.json'
+#     json_list = []
+#     for files in listOfFiles:  
+#         if fnmatch.fnmatch(files, pattern):
+#             json_list.append(files)
+#     return json_list
 
 def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
     # ------------------------------------------------------
@@ -274,8 +275,11 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
         populate_datastore()
         populate_datastore_properties()
     # ------------------------------------------------------
+    # building var for filename format
     formatting = datetime.datetime.now()
+    # updating global dict for identifying data
     dice_json['customer_id'] = cust_id
+    dice_json['vrops'] = host
     dice_json['filename'] = 'dice_vrops_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
     # populating global data
     populate_data()

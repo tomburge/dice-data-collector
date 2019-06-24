@@ -9,7 +9,7 @@ ENV REDIS_PORT 6379
 COPY . /app
 WORKDIR /app
 
-RUN apk update && apk add bash && rm -rf /var/cache/apk/*
+RUN apk update && apk add bash python3-dev gcc build-base && rm -rf /var/cache/apk/*
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 

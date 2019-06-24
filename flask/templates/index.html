@@ -5,7 +5,7 @@
 <h4>Please enter connection and credentials for one of the endpoints below:</h4>
 
 <div class="clr-row">
-    <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
+    <div class="clr-col-lg-5 clr-col-12">
         <form role="form" name="vrops-connect" id="vrops-connect" method="POST" action="{{ url_for('vrops_connect') }}">
             <div class="card">
                 <div class="card-header">
@@ -17,7 +17,7 @@
                             {{ vrops_form.csrf_token }}
                             <div class="form-group">
                                 {{ vrops_form.host.label }}
-                                {{ vrops_form.host(class="clrInput", placeholder="vrops.company.org") }}
+                                {{ vrops_form.host(class="clrInput", placeholder="vrops.company.org", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide the FQDN of the vROPs Master ex: vrops.company.org</span>
@@ -25,7 +25,7 @@
                             </div>
                             <div class="form-group">
                                 {{ vrops_form.user.label }}
-                                {{ vrops_form.user(class="clrInput", placeholder="Username") }}
+                                {{ vrops_form.user(class="clrInput", placeholder="Username (If AD use user@company.org)", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide a username that has access to read data from vROPs.</span>
@@ -33,7 +33,7 @@
                             </div>
                             <div class="form-group">
                                 {{ vrops_form.pwd.label }}
-                                {{ vrops_form.pwd(class="clrInput", placeholder="Password") }}
+                                {{ vrops_form.pwd(class="clrInput", placeholder="Password", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide the password for the username.</span>
@@ -41,7 +41,7 @@
                             </div>
                             <div class="form-group">
                                 {{ vrops_form.customer_id.label }}
-                                {{ vrops_form.customer_id(class="clrInput", placeholder="CUST-##################") }}
+                                {{ vrops_form.customer_id(class="clrInput", placeholder="CUST-##################", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide the Customer ID</span>
@@ -61,7 +61,7 @@
 </div>
 
 <div class="clr-row">
-    <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
+    <div class="clr-col-lg-5 clr-col-12">
         <form role="form" name="vcenter-connect" id="vcenter-connect" method="POST" action="{{ url_for('vcenter_connect') }}">
             <div class="card">
                 <div class="card-header">
@@ -73,7 +73,7 @@
                             {{ vcenter_form.csrf_token }}
                             <div class="form-group">
                                 {{ vcenter_form.host.label }}
-                                {{ vcenter_form.host(class="clrInput", placeholder="vcenter.company.org") }}
+                                {{ vcenter_form.host(class="clrInput", placeholder="vcenter.company.org", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide the FQDN of the vCenter ex: vcenter.company.org</span>
@@ -81,7 +81,7 @@
                             </div>
                             <div class="form-group">
                                 {{ vcenter_form.user.label }}
-                                {{ vcenter_form.user(class="clrInput", placeholder="Username") }}
+                                {{ vcenter_form.user(class="clrInput", placeholder="Username (If AD use user@company.org)", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide a username that has access to read data from vCenter.</span>
@@ -89,7 +89,7 @@
                             </div>
                             <div class="form-group">
                                 {{ vcenter_form.pwd.label }}
-                                {{ vcenter_form.pwd(class="clrInput", placeholder="Password") }}
+                                {{ vcenter_form.pwd(class="clrInput", placeholder="Password", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide the password for the username.</span>
@@ -97,7 +97,7 @@
                             </div>
                             <div class="form-group">
                                 {{ vcenter_form.customer_id.label }}
-                                {{ vcenter_form.customer_id(class="clrInput", placeholder="CUST-##################") }}
+                                {{ vcenter_form.customer_id(class="clrInput", placeholder="CUST-##################", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide the Customer ID</span>
@@ -107,7 +107,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <span>{{ vcenter_form.submit(class="btn btn-primary center disabled") }}</span>
+                    <span>{{ vcenter_form.submit(class="btn btn-primary center") }}</span>
                     <span>{{ vcenter_form.submit(class="btn btn-primary center disabled", value="Test Connection") }}</span>
                     <span>Put Connection Message Here</span>
                 </div>
