@@ -10,9 +10,10 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 host = input("Enter vROPs FQDN: ")
 username = input("Enter a user that has access to vROPs: ")
 password = input("Enter the password for the specified user: ")
+port = input('Enter the port for vROPs: ')
+cust_id = 'CUST-1234567890' # input('Please enter a customer ID: ')
 
 # random vars
-cust_id = 'CUST-1234567890'
 formatting = datetime.datetime.now()
 
 # resource kinds
@@ -42,7 +43,7 @@ def pull_data_from_vrops():
     # formatting vROPS API URL
     # ------------------------------------------------------
     def vrops_url():
-        url = "https://" + host + '/suite-api/api'
+        url = "https://" + host + ':' + port + '/suite-api/api'
         return url
     # ------------------------------------------------------
     # creating vROPs API URL
@@ -270,11 +271,6 @@ def pull_data_from_vrops():
     def populate_data():
         build_global_resource_list()
         populate_global_variables()
-
-        # create debug file for the global vmware adapter resources variable
-        with open('resources_debug.json', 'w') as jw:
-            json.dump(vmware_adapter_resources, jw, indent=4)
-
         populate_virtual_machine()
         populate_virtual_machine_properties()
         populate_host_system()
