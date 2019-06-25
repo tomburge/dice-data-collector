@@ -1,6 +1,6 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
-{% block body %} 
+{% block body %}
 
 <h4>Please enter connection and credentials for one of the endpoints below:</h4>
 
@@ -20,7 +20,7 @@
                                 {{ vrops_form.host(class="clrInput", placeholder="vrops.company.org", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
-                                    <span class="tooltip-content">Please provide the FQDN of the vROPs Master ex: vrops.company.org</span>
+                                    <span class="tooltip-content">Please provide the FQDN or IP address of the vROPs Master ex: vrops.company.org</span>
                                 </a>
                             </div>
                             <div class="form-group">
@@ -76,7 +76,7 @@
                                 {{ vcenter_form.host(class="clrInput", placeholder="vcenter.company.org", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
-                                    <span class="tooltip-content">Please provide the FQDN of the vCenter ex: vcenter.company.org</span>
+                                    <span class="tooltip-content">Please provide the FQDN or IP address of the vCenter ex: vcenter.company.org</span>
                                 </a>
                             </div>
                             <div class="form-group">
