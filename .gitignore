@@ -111,3 +111,4 @@ flask/.vscode/
 .idea/
 dice-data-collector.tar
 
+flask/cli-vrops-debug.py
