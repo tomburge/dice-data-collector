@@ -27,7 +27,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
     if config.datastoreUrl:
         vm_ds = config.datastoreUrl[0].name
     else:
-        vm_ds = 'no datastore found'
+        vm_ds = 'error'
 
 
     vm_obj = {}
@@ -177,7 +177,7 @@ def get_cluster_info(cluster, depth=1, max_depth=10):
                 "CPUDemand": summary.usageSummary.cpuDemandMhz,
                 "MemDemand": summary.usageSummary.memDemandMB,
                 "TotalVMCount": summary.usageSummary.totalVmCount
-            }           
+            }
         }
     )
 
@@ -208,7 +208,7 @@ def get_ds_info(ds, depth=1, max_depth=10):
                 "Capacity": summary.capacity,
                 "FreeSpace": summary.freeSpace,
                 "Type": summary.type
-            }           
+            }
         }
     )
 
@@ -238,7 +238,7 @@ def get_net_info(net, depth=1, max_depth=10):
         {
             summary.name: {
                 "vDSUUID": summary.uuid,
-            }           
+            }
         }
     )
 
@@ -267,7 +267,7 @@ def get_pg_info(pg, depth=1, max_depth=10):
         {
             summary.name: {
                 "vDS": config.distributedVirtualSwitch.name,
-            }           
+            }
         }
     )
 
