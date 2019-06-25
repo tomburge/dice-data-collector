@@ -2,10 +2,10 @@
 import json
 
 # flask imports
-from flask import Flask, render_template, redirect, url_for, request, Response
+from flask import Flask, render_template, redirect, url_for, request, Response, flash
 from flask_assets import Bundle, Environment
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, InputRequired
 from celery import Celery, task
 
@@ -52,6 +52,8 @@ class LoginForm(FlaskForm):
     pwd = PasswordField('Password: ', validators=[InputRequired(), DataRequired()])
     port = StringField('Port: ', validators=[InputRequired(), DataRequired()])
     customer_id = StringField('Customer ID', validators=[InputRequired(), DataRequired()])
+    vrops_connect = HiddenField()
+    vcenter_connect = HiddenField()
     submit = SubmitField('Collect')
     test =SubmitField('Test Connection')
 
@@ -106,51 +108,68 @@ def test_call():
         j.write(test_call)
 
 
-@application.route("/", methods=['GET'])
+@application.route("/", methods=['GET', "POST"])
 def index():
     vrops_form = LoginForm()
     vcenter_form = LoginForm()
-    return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form)
-
-
-@application.route("/vrops-connect", methods=["GET","POST"])
-def vrops_connect():
+    vr_message = ''
+    vc_message = ''
     if request.method == "POST":
-        if 'submit' in request.form:
-            vropshost = request.form.get('host')
-            vropsuser = request.form.get('user')
-            vropspass = request.form.get('pwd')
-            vropsport = request.form.get('port')
-            customer_id = request.form.get('customer_id')
-            celery.send_task('call.vrops.connect', args=(vropshost, vropsuser, vropspass, vropsport, customer_id))
-            return redirect('get-json')
-        elif 'test' in request.form:
-            vropshost = request.form.get('host')
-            vropsuser = request.form.get('user')
-            vropspass = request.form.get('pwd')
-            vropsport = request.form.get('port')
-            celery.send_task('call.vrops.test', args=(vropshost, vropsuser, vropspass, vropsport))
-            return redirect('get-json')
-            
-
-@application.route("/vcenter-connect", methods=["GET","POST"])
-def vcenter_connect():
-    if request.method == "POST":
-        if 'submit' in request.form:
-            vchost = request.form.get('host')
-            vcuser = request.form.get('user')
-            vcpass = request.form.get('pwd')
-            vcport = request.form.get('port')
-            customer_id = request.form.get('customer_id')
-            celery.send_task('call.vcenter.connect', args=(vchost, vcuser, vcpass, vcport, customer_id))
-            return redirect('get-json')
-        elif 'test' in request.form:
-            vchost = request.form.get('host')
-            vcuser = request.form.get('user')
-            vcpass = request.form.get('pwd')
-            vcport = request.form.get('port')
-            celery.send_task('call.vcenter.test', args=(vchost, vcuser, vcpass, vcport))
-            return redirect('get-json')
+        if "vrops_connect" in request.form:
+            if 'submit' in request.form:
+                vropshost = request.form.get('host')
+                vropsuser = request.form.get('user')
+                vropspass = request.form.get('pwd')
+                vropsport = request.form.get('port')
+                customer_id = request.form.get('customer_id')
+                code = test_vrops_connect(vropshost, vropsuser, vropspass, vropsport)
+                if code == 200:
+                    celery.send_task('call.vrops.connect', args=(vropshost, vropsuser, vropspass, vropsport, customer_id))
+                    return redirect('get-json')
+                else:
+                    vr_message = 'Connection Failed'
+                    return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form, vc_message=vc_message, vr_message=vr_message)
+            elif 'test' in request.form:
+                vropshost = request.form.get('host')
+                vropsuser = request.form.get('user')
+                vropspass = request.form.get('pwd')
+                vropsport = request.form.get('port')
+                code = test_vrops_connect(vropshost, vropsuser, vropspass, vropsport)
+                if code == 200:
+                    vr_message = 'Connection Successful'
+                    return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form, vc_message=vc_message, vr_message=vr_message)
+                else:
+                    vr_message = 'Connection Failed'
+                    return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form, vc_message=vc_message, vr_message=vr_message)
+        elif "vcenter_connect" in request.form:
+            if 'submit' in request.form:
+                vchost = request.form.get('host')
+                vcuser = request.form.get('user')
+                vcpass = request.form.get('pwd')
+                vcport = request.form.get('port')
+                customer_id = request.form.get('customer_id')
+                code = test_vcenter_connect(vchost, vcuser, vcpass, vcport)
+                if code == 200:
+                    celery.send_task('call.vcenter.connect', args=(vchost, vcuser, vcpass, vcport, customer_id))
+                    return redirect('get-json')
+                else:
+                    vc_message = 'Connection Failed'
+                    return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form, vc_message=vc_message, vr_message=vr_message)
+            elif 'test' in request.form:
+                vchost = request.form.get('host')
+                vcuser = request.form.get('user')
+                vcpass = request.form.get('pwd')
+                vcport = request.form.get('port')
+                code = test_vcenter_connect(vchost, vcuser, vcpass, vcport)
+                if code == 200:
+                    vc_message = 'Connection Successful'
+                    return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form, vc_message=vc_message, vr_message=vr_message)
+                else:
+                    vc_message = 'Connection Failed'
+                    return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form, vc_message=vc_message, vr_message=vr_message)
+    else:
+        message = ''
+        return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form, vc_message=vc_message, vr_message=vr_message)
 
 
 @application.route("/example")
