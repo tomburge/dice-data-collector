@@ -11,7 +11,7 @@ host = input("Enter vROPs FQDN: ")
 username = input("Enter a user that has access to vROPs: ")
 password = input("Enter the password for the specified user: ")
 port = input('Enter the port for vROPs: ')
-cust_id = 'CUST-1234567890' # input('Please enter a customer ID: ')
+cust_id = input('Please enter a customer ID: ')
 
 # random vars
 formatting = datetime.datetime.now()
