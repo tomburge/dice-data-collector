@@ -11,9 +11,17 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, InputRequired
 from celery import Celery, task
 
+<<<<<<< Updated upstream
 # my imports
 from vrops import pull_data_from_vrops, get_list_of_json_files
 from push_to_dice import dice_transmit
+=======
+# app imports
+from test_connect import test_vrops_connect, test_vcenter_connect
+from vrops import pull_data_from_vrops
+from vcenter import pull_data_from_vcenter
+from general_tasks import dice_transmit, get_list_of_json_files
+>>>>>>> Stashed changes
 import config
 
 # ---------------------------------------------------------------------------------
@@ -56,12 +64,43 @@ class TransmitForm(FlaskForm):
 
 @celery.task(name='call.vrops.connect')
 def call_vrops_connect(vropshost, vropsuser, vropspass, customer_id):
-    vhost = vropshost
-    vuser = vropsuser
-    vpass = vropspass
-    cust_id = customer_id
-    pull_data_from_vrops(vhost, vuser, vpass, cust_id)
+    pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id)
 
+
+@celery.task(name='call.vrops.test')
+def call_vrops_test(vropshost, vropsuser, vropspass):
+    code = test_vrops_connect(vropshost, vropsuser, vropspass)
+    if code == 200:
+        print('success')
+    else:
+        print('failure')
+
+<<<<<<< Updated upstream
+=======
+
+@celery.task(name='call.vcenter.connect')
+def call_vcenter_connect(vchost, vcuser, vcpass, customer_id):
+    pull_data_from_vcenter(vchost, vcuser, vcpass, customer_id)
+
+
+@celery.task(name='call.vcenter.test')
+def call_vcenter_test(vchost, vcuser, vcpass):
+    code = test_vcenter_connect(vchost, vcuser, vcpass)
+    if code == 200:
+        print('success')
+    else:
+        print('failure')
+
+
+@celery.task(name='push.to.dice')
+def transmit_to_dice(api_key, api_secret, json_file):
+    api_key = api_key
+    api_secret = api_secret
+    json_file = json_file
+    dice_transmit(api_key, api_secret, json_file)
+
+
+>>>>>>> Stashed changes
 @celery.task(name='call.test.call')
 def test_call():
     test_call = 'test_call was called\n'
@@ -76,12 +115,47 @@ def index():
 @application.route("/vrops-connect", methods=["GET","POST"])
 def vrops_connect():
     if request.method == "POST":
+<<<<<<< Updated upstream
         vropshost = request.form.get('vropshost')
         vropsuser = request.form.get('vropsuser')
         vropspass = request.form.get('vropspass')
         customer_id = request.form.get('customer_id')
         celery.send_task('call.vrops.connect', args=(vropshost, vropsuser, vropspass, customer_id))
         return redirect('get-json')
+=======
+        if 'submit' in request.form:
+            vropshost = request.form.get('host')
+            vropsuser = request.form.get('user')
+            vropspass = request.form.get('pwd')
+            customer_id = request.form.get('customer_id')
+            celery.send_task('call.vrops.connect', args=(vropshost, vropsuser, vropspass, customer_id))
+            return redirect('get-json')
+        elif 'test' in request.form:
+            vropshost = request.form.get('host')
+            vropsuser = request.form.get('user')
+            vropspass = request.form.get('pwd')
+            celery.send_task('call.vrops.test', args=(vropshost, vropsuser, vropspass))
+            return redirect('get-json')
+            
+
+@application.route("/vcenter-connect", methods=["GET","POST"])
+def vcenter_connect():
+    if request.method == "POST":
+        if 'submit' in request.form:
+            vchost = request.form.get('host')
+            vcuser = request.form.get('user')
+            vcpass = request.form.get('pwd')
+            customer_id = request.form.get('customer_id')
+            celery.send_task('call.vcenter.connect', args=(vchost, vcuser, vcpass, customer_id))
+            return redirect('get-json')
+        elif 'test' in request.form:
+            vchost = request.form.get('host')
+            vcuser = request.form.get('user')
+            vcpass = request.form.get('pwd')
+            celery.send_task('call.vcenter.test', args=(vchost, vcuser, vcpass))
+            return redirect('get-json')
+
+>>>>>>> Stashed changes
 
 @application.route("/example")
 def example():

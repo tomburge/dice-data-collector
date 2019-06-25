@@ -49,11 +49,78 @@
                     </div>
                 </div>
                 <div class="card-footer">
+<<<<<<< Updated upstream
                         {{ form.submit(class="btn btn-primary center") }}
+=======
+                    <span>{{ vrops_form.submit(class="btn btn-primary center") }}</span>
+                    <span>{{ vrops_form.test(class="btn btn-primary center") }}</span>
+                    <span>Put Connection Message Here</span>
+>>>>>>> Stashed changes
                 </div>
             </div>
             </form>
         </div>
     </div>
+<<<<<<< Updated upstream
+=======
+</div>
+
+<div class="clr-row">
+    <div class="clr-col-lg-5 clr-col-12">
+        <form role="form" name="vcenter-connect" id="vcenter-connect" method="POST" action="{{ url_for('vcenter_connect') }}">
+            <div class="card">
+                <div class="card-header">
+                    vCenter Server
+                </div>
+                <div class="card-block">
+                    <div class="card-text">
+                        <section class="form-block">
+                            {{ vcenter_form.csrf_token }}
+                            <div class="form-group">
+                                {{ vcenter_form.host.label }}
+                                {{ vcenter_form.host(class="clrInput", placeholder="vcenter.company.org", size="40") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the FQDN of the vCenter ex: vcenter.company.org</span>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                {{ vcenter_form.user.label }}
+                                {{ vcenter_form.user(class="clrInput", placeholder="Username (If AD use user@company.org)", size="40") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide a username that has access to read data from vCenter.</span>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                {{ vcenter_form.pwd.label }}
+                                {{ vcenter_form.pwd(class="clrInput", placeholder="Password", size="40") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the password for the username.</span>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                {{ vcenter_form.customer_id.label }}
+                                {{ vcenter_form.customer_id(class="clrInput", placeholder="CUST-##################", size="40") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the Customer ID</span>
+                                </a>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>{{ vcenter_form.submit(class="btn btn-primary center") }}</span>
+                    <span>{{ vcenter_form.test(class="btn btn-primary center") }}</span>
+                    <span>Put Connection Message Here</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+>>>>>>> Stashed changes
 
 {% endblock %}

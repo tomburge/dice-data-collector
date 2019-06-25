@@ -1,7 +1,10 @@
 import requests
 import json
+<<<<<<< Updated upstream
 import os, fnmatch
 import platform
+=======
+>>>>>>> Stashed changes
 import datetime
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
