@@ -40,6 +40,14 @@
                                 </a>
                             </div>
                             <div class="form-group">
+                                {{ vrops_form.port.label }}
+                                {{ vrops_form.port(class="clrInput", placeholder="Port", size="40") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the vROPs port. Default is 443</span>
+                                </a>
+                            </div>
+                            <div class="form-group">
                                 {{ vrops_form.customer_id.label }}
                                 {{ vrops_form.customer_id(class="clrInput", placeholder="CUST-##################", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
@@ -93,6 +101,14 @@
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide the password for the username.</span>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                {{ vcenter_form.port.label }}
+                                {{ vcenter_form.port(class="clrInput", placeholder="Port", size="40") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the vCenter port. Default is 443</span>
                                 </a>
                             </div>
                             <div class="form-group">

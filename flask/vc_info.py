@@ -29,6 +29,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
     else:
         vm_ds = 'error'
 
+
     vm_obj = {}
 
     vm_obj.update(
@@ -176,7 +177,7 @@ def get_cluster_info(cluster, depth=1, max_depth=10):
                 "CPUDemand": summary.usageSummary.cpuDemandMhz,
                 "MemDemand": summary.usageSummary.memDemandMB,
                 "TotalVMCount": summary.usageSummary.totalVmCount
-            }
+            }           
         }
     )
 
@@ -207,10 +208,15 @@ def get_ds_info(ds, depth=1, max_depth=10):
                 "Capacity": summary.capacity,
                 "FreeSpace": summary.freeSpace,
                 "Type": summary.type
-            }
+            }           
         }
     )
 
+    return ds_obj
+
+
+def get_net_info(net, depth=1, max_depth=10):
+    """ Get info for a particular distributed switch """
 
     # if this is a group it will have children. if it does, recurse into them and then return
     if hasattr(net, 'childEntity'):
@@ -232,7 +238,7 @@ def get_ds_info(ds, depth=1, max_depth=10):
         {
             summary.name: {
                 "vDSUUID": summary.uuid,
-            }
+            }           
         }
     )
 
@@ -261,7 +267,7 @@ def get_pg_info(pg, depth=1, max_depth=10):
         {
             summary.name: {
                 "vDS": config.distributedVirtualSwitch.name,
-            }
+            }           
         }
     )
 

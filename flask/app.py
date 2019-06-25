@@ -50,6 +50,7 @@ class LoginForm(FlaskForm):
     host = StringField('Host Address:', validators=[InputRequired(), DataRequired()])
     user = StringField('Username: ', validators=[InputRequired(), DataRequired()])
     pwd = PasswordField('Password: ', validators=[InputRequired(), DataRequired()])
+    port = StringField('Port: ', validators=[InputRequired(), DataRequired()])
     customer_id = StringField('Customer ID', validators=[InputRequired(), DataRequired()])
     submit = SubmitField('Collect')
     test =SubmitField('Test Connection')
@@ -63,18 +64,27 @@ class TransmitForm(FlaskForm):
 
 
 @celery.task(name='call.vrops.connect')
-def call_vrops_connect(vropshost, vropsuser, vropspass, customer_id):
-    pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id)
+def call_vrops_connect(vropshost, vropsuser, vropspass, vropsport, customer_id):
+    pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id)
+
+
+@celery.task(name='call.vrops.test')
+def call_vrops_test(vropshost, vropsuser, vropspass, vropsport):
+    code = test_vrops_connect(vropshost, vropsuser, vropspass, vropsport)
+    if code == 200:
+        print('success')
+    else:
+        print(code)
 
 
 @celery.task(name='call.vcenter.connect')
-def call_vcenter_connect(vchost, vcuser, vcpass, customer_id):
-    pull_data_from_vcenter(vchost, vcuser, vcpass, customer_id)
+def call_vcenter_connect(vchost, vcuser, vcpass, vcport, customer_id):
+    pull_data_from_vcenter(vchost, vcuser, vcpass, vcport, customer_id)
 
 
 @celery.task(name='call.vcenter.test')
-def call_vcenter_test(vchost, vcuser, vcpass):
-    code = test_vcenter_connect(vchost, vcuser, vcpass)
+def call_vcenter_test(vchost, vcuser, vcpass, vcport):
+    code = test_vcenter_connect(vchost, vcuser, vcpass, vcport)
     if code == 200:
         print('success')
     else:
@@ -110,14 +120,16 @@ def vrops_connect():
             vropshost = request.form.get('host')
             vropsuser = request.form.get('user')
             vropspass = request.form.get('pwd')
+            vropsport = request.form.get('port')
             customer_id = request.form.get('customer_id')
-            celery.send_task('call.vrops.connect', args=(vropshost, vropsuser, vropspass, customer_id))
+            celery.send_task('call.vrops.connect', args=(vropshost, vropsuser, vropspass, vropsport, customer_id))
             return redirect('get-json')
         elif 'test' in request.form:
             vropshost = request.form.get('host')
             vropsuser = request.form.get('user')
             vropspass = request.form.get('pwd')
-            celery.send_task('call.vrops.test', args=(vropshost, vropsuser, vropspass))
+            vropsport = request.form.get('port')
+            celery.send_task('call.vrops.test', args=(vropshost, vropsuser, vropspass, vropsport))
             return redirect('get-json')
             
 
@@ -128,26 +140,17 @@ def vcenter_connect():
             vchost = request.form.get('host')
             vcuser = request.form.get('user')
             vcpass = request.form.get('pwd')
+            vcport = request.form.get('port')
             customer_id = request.form.get('customer_id')
-            celery.send_task('call.vcenter.connect', args=(vchost, vcuser, vcpass, customer_id))
+            celery.send_task('call.vcenter.connect', args=(vchost, vcuser, vcpass, vcport, customer_id))
             return redirect('get-json')
         elif 'test' in request.form:
             vchost = request.form.get('host')
             vcuser = request.form.get('user')
             vcpass = request.form.get('pwd')
-            celery.send_task('call.vcenter.test', args=(vchost, vcuser, vcpass))
+            vcport = request.form.get('port')
+            celery.send_task('call.vcenter.test', args=(vchost, vcuser, vcpass, vcport))
             return redirect('get-json')
-
-
-@application.route("/vcenter-connect", methods=["GET","POST"])
-def vcenter_connect():
-    if request.method == "POST":
-        vchost = request.form.get('host')
-        vcuser = request.form.get('user')
-        vcpass = request.form.get('pwd')
-        customer_id = request.form.get('customer_id')
-        celery.send_task('call.vcenter.connect', args=(vchost, vcuser, vcpass, customer_id))
-        return redirect('get-json')
 
 
 @application.route("/example")

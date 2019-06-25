@@ -30,27 +30,27 @@ dice_json = {
     }
 
 
-def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
+def pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id):
     # ------------------------------------------------------
     # Pulling data from flask form and populating global auth variables
     # ------------------------------------------------------
-    host = vropshost
-    username = vropsuser
-    password = vropspass
-    cust_id = customer_id
+    # host = vropshost
+    # username = vropsuser
+    # password = vropspass
+    # cust_id = customer_id
     # ------------------------------------------------------
     # formatting vROPS API URL
     # ------------------------------------------------------
 
     def vrops_url():
-        url = "https://" + host + '/suite-api/api'
+        url = "https://" + vropshost + ':' + vropsport + '/suite-api/api'
         return url
     # ------------------------------------------------------
     # creating vROPs API URL
     vrops_url = vrops_url()
     # ------------------------------------------------------
     # setting auth values
-    auth_values = (username, password)
+    auth_values = (vropsuser, vropspass)
     # ------------------------------------------------------
 
     def get_vmware_adapter_resources(page, pagesize):
@@ -289,8 +289,8 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, customer_id):
     # building var for filename format
     formatting = datetime.datetime.now()
     # updating global dict for identifying data
-    dice_json['customer_id'] = cust_id
-    dice_json['vrops'] = host
+    dice_json['customer_id'] = customer_id
+    dice_json['vrops'] = vropshost
     dice_json['filename'] = 'dice_vrops_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
     # populating global data
     populate_data()

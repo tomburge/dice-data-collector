@@ -21,22 +21,13 @@ dice_json = {
     }
 
 
-def pull_data_from_vcenter(vchost, vcuser, vcpass, customer_id):
-    # ------------------------------------------------------
-    # Pulling data from flask form and populating global auth variables
-    # ------------------------------------------------------
-    host = vchost
-    user = vcuser
-    pwd = vcpass
-    port = 443
-    cust_id = customer_id
-    
+def pull_data_from_vcenter(vchost, vcuser, vcpass, vcport, customer_id):
     # ssl context setting
     context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
     context.verify_mode = ssl.CERT_NONE
 
     # connect service instance
-    service_instance = connect.SmartConnect(host=host, user=user, pwd=pwd, port=int(port), sslContext=context)
+    service_instance = connect.SmartConnect(host=vchost, user=vcuser, pwd=vcpass, port=int(vcport), sslContext=context)
     content = service_instance.RetrieveContent()
     object_view = content.viewManager.CreateContainerView(content.rootFolder, [], True)
 
@@ -63,8 +54,8 @@ def pull_data_from_vcenter(vchost, vcuser, vcpass, customer_id):
     # building var for filename format
     formatting = datetime.datetime.now()
     # updating global dict for identifying data
-    dice_json['customer_id'] = cust_id
-    dice_json['vcenter'] = host
+    dice_json['customer_id'] = customer_id
+    dice_json['vcenter'] = vchost
     dice_json['filename'] = 'dice_vc_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
     # ------------------------------------------------------
     # writing JSON
