@@ -24,7 +24,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
 
     vm_ds = ''
 
-    if config.datastoreUrl is not None:
+    if config.datastoreUrl:
         vm_ds = config.datastoreUrl[0].name
     else:
         vm_ds = 'no datastore found'
