@@ -51,6 +51,7 @@ class LoginForm(FlaskForm):
     pwd = PasswordField('Password: ', validators=[InputRequired(), DataRequired()])
     customer_id = StringField('Customer ID', validators=[InputRequired(), DataRequired()])
     submit = SubmitField('Submit')
+    test =SubmitField('Test Connection')
 
 
 class TransmitForm(FlaskForm):
