@@ -51,8 +51,8 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <span>{{ vrops_form.submit(class="btn btn-primary center") }}</span>
-                    <span>{{ vrops_form.submit(class="btn btn-primary center disabled", value="Test Connection") }}</span>
+                    <span>{{ vrops_form.submit(class="btn btn-primary center", name="connect") }}</span>
+                    <span>{{ vrops_form.submit(class="btn btn-primary center disabled", value="Test Connection", name="test-connect") }}</span>
                     <span>Put Connection Message Here</span>
                 </div>
             </div>
@@ -107,8 +107,8 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <span>{{ vcenter_form.submit(class="btn btn-primary center") }}</span>
-                    <span>{{ vcenter_form.submit(class="btn btn-primary center disabled", value="Test Connection") }}</span>
+                    <span>{{ vcenter_form.submit(class="btn btn-primary center", name="connect") }}</span>
+                    <span>{{ vcenter_form.submit(class="btn btn-primary center disabled", value="Test Connection", name="test-connect") }}</span>
                     <span>Put Connection Message Here</span>
                 </div>
             </div>

@@ -22,6 +22,14 @@ def get_vm_info(vm, depth=1, max_depth=20):
         if i.key == 'machine.id':
             vmtype = 'vdi'
 
+    vm_ds = ''
+
+    if config.datastoreUrl is not None:
+        vm_ds = config.datastoreUrl[0].name
+    else:
+        vm_ds = 'no datastore found'
+
+
     vm_obj = {}
 
     vm_obj.update(
@@ -51,7 +59,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
                 "ToolsRunningStatus": summary.guest.toolsRunningStatus,
                 "ToolsVersion": config.tools.toolsVersion,
                 "vHWVersion": config.version,
-                "Datastore": config.datastoreUrl[0].name,
+                "Datastore": vm_ds,
                 "StorageUsed": storage_used_gb,
                 "StorageUnused": storage_alloc_gb,
                 "StorageAllocated": storage_used_gb + storage_alloc_gb,
