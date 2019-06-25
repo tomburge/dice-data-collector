@@ -1,0 +1,8 @@
+
+.vscode/settings.json
+flask/dice-flask/pyvenv.cfg
+flask/dice-flask/Scripts/activate.bat
+flask/dice-flask/Scripts/activate
+*.exe
+*.bat
+*.ps1
