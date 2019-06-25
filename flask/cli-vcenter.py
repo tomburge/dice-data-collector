@@ -7,11 +7,11 @@ from pyVmomi import vim
 import vc_info as info
 
 # global auth vars
-cust_id = 'CUST-1234567890'  # input('Please enter a customer ID: ')
 host = input('Enter the vCenter FQDN: ')
 user = input('Enter the username for vCenter: ')
 pwd = input('Enter the password for the user: ')
 port = input('Enter the port for vCenter: ')
+cust_id = input('Please enter a customer ID: ')
 
 # ssl context setting
 context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
