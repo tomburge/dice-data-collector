@@ -29,7 +29,6 @@ def get_vm_info(vm, depth=1, max_depth=20):
     else:
         vm_ds = 'error'
 
-
     vm_obj = {}
 
     vm_obj.update(
@@ -212,11 +211,6 @@ def get_ds_info(ds, depth=1, max_depth=10):
         }
     )
 
-    return ds_obj
-
-
-def get_net_info(net, depth=1, max_depth=10):
-    """ Get info for a particular distributed switch """
 
     # if this is a group it will have children. if it does, recurse into them and then return
     if hasattr(net, 'childEntity'):

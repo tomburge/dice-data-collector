@@ -1,7 +1,5 @@
 import requests
 import json
-# import os, fnmatch
-# import platform
 import datetime
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
