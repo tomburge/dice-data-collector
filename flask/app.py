@@ -70,27 +70,9 @@ def call_vrops_connect(vropshost, vropsuser, vropspass, vropsport, customer_id):
     pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id)
 
 
-@celery.task(name='call.vrops.test')
-def call_vrops_test(vropshost, vropsuser, vropspass, vropsport):
-    code = test_vrops_connect(vropshost, vropsuser, vropspass, vropsport)
-    if code == 200:
-        print('success')
-    else:
-        print(code)
-
-
 @celery.task(name='call.vcenter.connect')
 def call_vcenter_connect(vchost, vcuser, vcpass, vcport, customer_id):
     pull_data_from_vcenter(vchost, vcuser, vcpass, vcport, customer_id)
-
-
-@celery.task(name='call.vcenter.test')
-def call_vcenter_test(vchost, vcuser, vcpass, vcport):
-    code = test_vcenter_connect(vchost, vcuser, vcpass, vcport)
-    if code == 200:
-        print('success')
-    else:
-        print('failure')
 
 
 @celery.task(name='push.to.dice')
