@@ -55,12 +55,13 @@
                 <div class="card-block">
                     <div class="card-text">
                         <section id="tasks">
-                            <table class="table table-compact">
+                            <table class="table table-compact clr-col-lg-5 clr-col-md-8 clr-col-12">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Task Name</th>
                                         <th>State</th>
-                                        <th>Runtime</th>
+                                        <th>Runtime (seconds)</th>
                                         <th>Exception</th>
                                         <th>Traceback</th>
                                     </tr>
@@ -68,11 +69,12 @@
                                 <tbody>
                                     {% for key, value in tasks.items() %}
                                     <tr>
-                                        <td><h4>{{ value['name'] }}</h4></td>
-                                        <td><h4>{{ value['state'] }}</h4></td>
-                                        <td><h4>{{ value['runtime'] }}</h4></td>
-                                        <td><h4>{{ value['trace'] }}</h4></td>
-                                        <td><h4>{{ value['err'] }}</h4></td>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value['name'] }}</td>
+                                        <td>{{ value['state'] }}</td>
+                                        <td>{{ value['runtime'] }}</td>
+                                        <td>{{ value['trace'] }}</td>
+                                        <td>{{ value['err'] }}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -89,7 +91,7 @@
         <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
             <div class="card">
                 <div class="card-header">
-                    JSON Files (Click to Download) (Files will appear when they have finished.)
+                    JSON Files (Click to Download) (Files will appear when the task state is SUCCESS.)
                 </div>
                 <div class="card-block">
                     <div class="card-text">
@@ -103,7 +105,7 @@
                                 <tbody>
                                     {% for file in files %}
                                     <tr>
-                                        <td><h4><a href="{{ url_for('static', filename='json/' + file) }}" download>{{ file }}</a></h4></td>
+                                        <td><a href="{{ url_for('static', filename='json/' + file) }}" download>{{ file }}</a></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -123,8 +125,8 @@
         }
     </script>
     <script>
-        setInterval("json_file_refresh();",5000); 
-        function json_file_refresh() {
+        setInterval("task_status_refresh();",5000); 
+        function task_status_refresh() {
             $( "#tasks" ).load(location.href + " #tasks" );
         }
     </script>
