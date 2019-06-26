@@ -199,6 +199,9 @@ def get_ds_info(ds, depth=1, max_depth=10):
     parent = ds.parent
     summary = ds.summary
 
+    storage_cap_gb = int(((summary.capacity / 1024) / 1024) / 1024)
+    storage_free_gb = int(((summary.freeSpace / 1024) / 1024) / 1024)
+
     ds_obj = {}
 
     ds_obj.update(
