@@ -6,6 +6,78 @@
 
 <div class="clr-row">
     <div class="clr-col-lg-5 clr-col-12">
+        <form role="form" name="vcenter-connect" id="vcenter-connect" method="POST" action="/">
+            <div class="card">
+                <div class="card-header">
+                    vCenter Server
+                </div>
+                <div class="card-block">
+                    <div class="card-text">
+                        <section class="form-block">
+                            {{ vcenter_form.csrf_token }}
+                            {{ vcenter_form.vcenter_connect() }}
+                            <div class="form-group">
+                                {{ vcenter_form.vc_host.label }}
+                                {{ vcenter_form.vc_host(class="clrInput", placeholder="vcenter.company.org", size="40") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the FQDN or IP address of the vCenter ex: vcenter.company.org</span>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                {{ vcenter_form.vc_user.label }}
+                                {{ vcenter_form.vc_user(class="clrInput", placeholder="Username (If AD use user@company.org)", size="40") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide a username that has access to read data from vCenter.</span>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                {{ vcenter_form.vc_pwd.label }}
+                                {{ vcenter_form.vc_pwd(class="clrInput", placeholder="Password", size="40") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the password for the username.</span>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                {{ vcenter_form.vc_port.label }}
+                                {{ vcenter_form.vc_port(class="clrInput", placeholder="Port", value="443", size="40") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the vCenter port. Default is 443</span>
+                                </a>
+                            </div>
+                            <div class="form-group">
+                                {{ vcenter_form.vc_customer_id.label }}
+                                {{ vcenter_form.vc_customer_id(class="clrInput", placeholder="CUST-##################", size="40") }}
+                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
+                                    <clr-icon shape="info-circle" size="24"></clr-icon>
+                                    <span class="tooltip-content">Please provide the Customer ID</span>
+                                </a>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span>{{ vcenter_form.vc_submit(class="btn btn-primary center") }}</span>
+                    <span>{{ vcenter_form.vc_test(class="btn btn-primary center") }}</span>
+                    {% if vc_message == 'Connection Successful' %}
+                        <span style="color: green">{{ vc_message }}</span>
+                    {% elif vc_message == 'Connection Failed' %}
+                        <span style="color: red">{{ vc_message }}</span>
+                    {% else %}
+                        <span>{{ vc_message }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="clr-row">
+    <div class="clr-col-lg-5 clr-col-12">
         <form role="form" name="vrops-connect" id="vrops-connect" method="POST" action="/">
             <div class="card">
                 <div class="card-header">
@@ -17,40 +89,40 @@
                             {{ vrops_form.csrf_token }}
                             {{ vrops_form.vrops_connect() }}
                             <div class="form-group">
-                                {{ vrops_form.host.label }}
-                                {{ vrops_form.host(class="clrInput", placeholder="vrops.company.org", size="40") }}
+                                {{ vrops_form.vr_host.label }}
+                                {{ vrops_form.vr_host(class="clrInput", placeholder="vrops.company.org", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide the FQDN or IP address of the vROPs Master ex: vrops.company.org</span>
                                 </a>
                             </div>
                             <div class="form-group">
-                                {{ vrops_form.user.label }}
-                                {{ vrops_form.user(class="clrInput", placeholder="Username (If AD use user@company.org)", size="40") }}
+                                {{ vrops_form.vr_user.label }}
+                                {{ vrops_form.vr_user(class="clrInput", placeholder="Username (If AD use user@company.org)", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide a username that has access to read data from vROPs.</span>
                                 </a>
                             </div>
                             <div class="form-group">
-                                {{ vrops_form.pwd.label }}
-                                {{ vrops_form.pwd(class="clrInput", placeholder="Password", size="40") }}
+                                {{ vrops_form.vr_pwd.label }}
+                                {{ vrops_form.vr_pwd(class="clrInput", placeholder="Password", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide the password for the username.</span>
                                 </a>
                             </div>
                             <div class="form-group">
-                                {{ vrops_form.port.label }}
-                                {{ vrops_form.port(class="clrInput", placeholder="Port", value="443", size="40") }}
+                                {{ vrops_form.vr_port.label }}
+                                {{ vrops_form.vr_port(class="clrInput", placeholder="Port", value="443", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide the vROPs port. Default is 443</span>
                                 </a>
                             </div>
                             <div class="form-group">
-                                {{ vrops_form.customer_id.label }}
-                                {{ vrops_form.customer_id(class="clrInput", placeholder="CUST-##################", size="40") }}
+                                {{ vrops_form.vr_customer_id.label }}
+                                {{ vrops_form.vr_customer_id(class="clrInput", placeholder="CUST-##################", size="40") }}
                                 <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
                                     <clr-icon shape="info-circle" size="24"></clr-icon>
                                     <span class="tooltip-content">Please provide the Customer ID</span>
@@ -60,8 +132,8 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <span>{{ vrops_form.submit(class="btn btn-primary center") }}</span>
-                    <span>{{ vrops_form.test(class="btn btn-primary center") }}</span>
+                    <span>{{ vrops_form.vr_submit(class="btn btn-primary center") }}</span>
+                    <span>{{ vrops_form.vr_test(class="btn btn-primary center") }}</span>
                     {% if vr_message == 'Connection Successful' %}
                         <span style="color: green">{{ vr_message }}</span>
                     {% elif vr_message == 'Connection Failed' %}
@@ -75,75 +147,6 @@
     </div>
 </div>
 
-<div class="clr-row">
-    <div class="clr-col-lg-5 clr-col-12">
-        <form role="form" name="vcenter-connect" id="vcenter-connect" method="POST" action="/">
-            <div class="card">
-                <div class="card-header">
-                    vCenter Server
-                </div>
-                <div class="card-block">
-                    <div class="card-text">
-                        <section class="form-block">
-                            {{ vcenter_form.csrf_token }}
-                            {{ vrops_form.vcenter_connect() }}
-                            <div class="form-group">
-                                {{ vcenter_form.host.label }}
-                                {{ vcenter_form.host(class="clrInput", placeholder="vcenter.company.org", size="40") }}
-                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
-                                    <clr-icon shape="info-circle" size="24"></clr-icon>
-                                    <span class="tooltip-content">Please provide the FQDN or IP address of the vCenter ex: vcenter.company.org</span>
-                                </a>
-                            </div>
-                            <div class="form-group">
-                                {{ vcenter_form.user.label }}
-                                {{ vcenter_form.user(class="clrInput", placeholder="Username (If AD use user@company.org)", size="40") }}
-                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
-                                    <clr-icon shape="info-circle" size="24"></clr-icon>
-                                    <span class="tooltip-content">Please provide a username that has access to read data from vCenter.</span>
-                                </a>
-                            </div>
-                            <div class="form-group">
-                                {{ vcenter_form.pwd.label }}
-                                {{ vcenter_form.pwd(class="clrInput", placeholder="Password", size="40") }}
-                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
-                                    <clr-icon shape="info-circle" size="24"></clr-icon>
-                                    <span class="tooltip-content">Please provide the password for the username.</span>
-                                </a>
-                            </div>
-                            <div class="form-group">
-                                {{ vcenter_form.port.label }}
-                                {{ vcenter_form.port(class="clrInput", placeholder="Port", value="443", size="40") }}
-                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
-                                    <clr-icon shape="info-circle" size="24"></clr-icon>
-                                    <span class="tooltip-content">Please provide the vCenter port. Default is 443</span>
-                                </a>
-                            </div>
-                            <div class="form-group">
-                                {{ vcenter_form.customer_id.label }}
-                                {{ vcenter_form.customer_id(class="clrInput", placeholder="CUST-##################", size="40") }}
-                                <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-lg">
-                                    <clr-icon shape="info-circle" size="24"></clr-icon>
-                                    <span class="tooltip-content">Please provide the Customer ID</span>
-                                </a>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <span>{{ vcenter_form.submit(class="btn btn-primary center") }}</span>
-                    <span>{{ vcenter_form.test(class="btn btn-primary center") }}</span>
-                    {% if vc_message == 'Connection Successful' %}
-                        <span style="color: green">{{ vc_message }}</span>
-                    {% elif vc_message == 'Connection Failed' %}
-                        <span style="color: red">{{ vc_message }}</span>
-                    {% else %}
-                        <span>{{ vc_message }}</span>
-                    {% endif %}
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+
 
 {% endblock %}

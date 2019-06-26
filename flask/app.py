@@ -1,5 +1,6 @@
 # python standard library imports
 import json
+from math import ceil
 
 # flask imports
 from flask import Flask, render_template, redirect, url_for, request, Response, flash
@@ -46,16 +47,26 @@ css = Bundle('css/clr-ui.min.css', 'css/clr-icons.min.css')
 env.register('css_all', css)
 
 
-class LoginForm(FlaskForm):
-    host = StringField('Host Address:', validators=[InputRequired(), DataRequired()])
-    user = StringField('Username: ', validators=[InputRequired(), DataRequired()])
-    pwd = PasswordField('Password: ', validators=[InputRequired(), DataRequired()])
-    port = StringField('Port: ', validators=[InputRequired(), DataRequired()])
-    customer_id = StringField('Customer ID', validators=[InputRequired(), DataRequired()])
-    vrops_connect = HiddenField()
+class VC_LoginForm(FlaskForm):
+    vc_host = StringField('Host Address:', validators=[InputRequired(), DataRequired()])
+    vc_user = StringField('Username: ', validators=[InputRequired(), DataRequired()])
+    vc_pwd = PasswordField('Password: ', validators=[InputRequired(), DataRequired()])
+    vc_port = StringField('Port: ', validators=[InputRequired(), DataRequired()])
+    vc_customer_id = StringField('Customer ID', validators=[InputRequired(), DataRequired()])
     vcenter_connect = HiddenField()
-    submit = SubmitField('Collect')
-    test =SubmitField('Test Connection')
+    vc_submit = SubmitField('Collect')
+    vc_test =SubmitField('Test Connection')
+
+
+class VR_LoginForm(FlaskForm):
+    vr_host = StringField('Host Address:', validators=[InputRequired(), DataRequired()])
+    vr_user = StringField('Username: ', validators=[InputRequired(), DataRequired()])
+    vr_pwd = PasswordField('Password: ', validators=[InputRequired(), DataRequired()])
+    vr_port = StringField('Port: ', validators=[InputRequired(), DataRequired()])
+    vr_customer_id = StringField('Customer ID', validators=[InputRequired(), DataRequired()])
+    vrops_connect = HiddenField()
+    vr_submit = SubmitField('Collect')
+    vr_test =SubmitField('Test Connection')
 
 
 class TransmitForm(FlaskForm):
@@ -92,18 +103,18 @@ def test_call():
 
 @application.route("/", methods=['GET', "POST"])
 def index():
-    vrops_form = LoginForm()
-    vcenter_form = LoginForm()
+    vrops_form = VR_LoginForm()
+    vcenter_form = VC_LoginForm()
     vr_message = ''
     vc_message = ''
     if request.method == "POST":
         if "vrops_connect" in request.form:
-            if 'submit' in request.form:
-                vropshost = request.form.get('host')
-                vropsuser = request.form.get('user')
-                vropspass = request.form.get('pwd')
-                vropsport = request.form.get('port')
-                customer_id = request.form.get('customer_id')
+            if 'vr_submit' in request.form:
+                vropshost = request.form.get('vr_host')
+                vropsuser = request.form.get('vr_user')
+                vropspass = request.form.get('vr_pwd')
+                vropsport = request.form.get('vr_port')
+                customer_id = request.form.get('vr_customer_id')
                 code = test_vrops_connect(vropshost, vropsuser, vropspass, vropsport)
                 if code == 200:
                     celery.send_task('call.vrops.connect', args=(vropshost, vropsuser, vropspass, vropsport, customer_id))
@@ -111,11 +122,11 @@ def index():
                 else:
                     vr_message = 'Connection Failed'
                     return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form, vc_message=vc_message, vr_message=vr_message)
-            elif 'test' in request.form:
-                vropshost = request.form.get('host')
-                vropsuser = request.form.get('user')
-                vropspass = request.form.get('pwd')
-                vropsport = request.form.get('port')
+            elif 'vr_test' in request.form:
+                vropshost = request.form.get('vr_host')
+                vropsuser = request.form.get('vr_user')
+                vropspass = request.form.get('vr_pwd')
+                vropsport = request.form.get('vr_port')
                 code = test_vrops_connect(vropshost, vropsuser, vropspass, vropsport)
                 if code == 200:
                     vr_message = 'Connection Successful'
@@ -124,12 +135,12 @@ def index():
                     vr_message = 'Connection Failed'
                     return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form, vc_message=vc_message, vr_message=vr_message)
         elif "vcenter_connect" in request.form:
-            if 'submit' in request.form:
-                vchost = request.form.get('host')
-                vcuser = request.form.get('user')
-                vcpass = request.form.get('pwd')
-                vcport = request.form.get('port')
-                customer_id = request.form.get('customer_id')
+            if 'vc_submit' in request.form:
+                vchost = request.form.get('vc_host')
+                vcuser = request.form.get('vc_user')
+                vcpass = request.form.get('vc_pwd')
+                vcport = request.form.get('vc_port')
+                customer_id = request.form.get('vc_customer_id')
                 code = test_vcenter_connect(vchost, vcuser, vcpass, vcport)
                 if code == 200:
                     celery.send_task('call.vcenter.connect', args=(vchost, vcuser, vcpass, vcport, customer_id))
@@ -137,11 +148,11 @@ def index():
                 else:
                     vc_message = 'Connection Failed'
                     return render_template('index.html', vrops_form=vrops_form, vcenter_form=vcenter_form, vc_message=vc_message, vr_message=vr_message)
-            elif 'test' in request.form:
-                vchost = request.form.get('host')
-                vcuser = request.form.get('user')
-                vcpass = request.form.get('pwd')
-                vcport = request.form.get('port')
+            elif 'vc_test' in request.form:
+                vchost = request.form.get('vc_host')
+                vcuser = request.form.get('vc_user')
+                vcpass = request.form.get('vc_pwd')
+                vcport = request.form.get('vc_port')
                 code = test_vcenter_connect(vchost, vcuser, vcpass, vcport)
                 if code == 200:
                     vc_message = 'Connection Successful'

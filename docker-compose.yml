@@ -8,6 +8,7 @@ services:
     restart: always
     ports:
       - "80:5000"
+      - "5555:5555"
     networks:
       - dice-ddc
 

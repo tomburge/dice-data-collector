@@ -2,48 +2,17 @@
 
 {% block body %} 
 
-<p></p>
-
-<h4>Here are the links to the completed JSON files:</h4>
-
-<p></p>
-
-<div id="jsonfiles">
+<div>
     <div class="clr-row">
         <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
-            <div class="card">
-                <div class="card-header">
-                    JSON Files (Click to Download) (Files will appear when they have finished.)
-                </div>
-                <div class="card-block">
-                    <div class="card-text">
-                        <section class="files-block">
-                            <ul class="list">
-                            {% for file in files %}
-                                <div>
-                                    <li><h4><a href="{{ url_for('static', filename='json/' + file) }}" download>{{ file }}</a></h4></li>
-                                </div>    
-                            {% endfor %}
-                            </ul>
-                        </section>
-                        <p></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="clr-row">
-        <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
-            <form role="form" name="transmit" id="transmit" method="POST" action="{{ url_for('transmit_data') }}">
+            <form role="form" class="clr-form" name="transmit" id="transmit" method="POST" action="{{ url_for('transmit_data') }}">
             <div class="card">
                 <div class="card-header">
                     Send to DICE (Internet Access Required)
                 </div>
                 <div class="card-block">
-                    <div class="card-text">
-                        <section class="form-block">
+                    <div class="card-text clr-form-control">
+                        <section class="form-block clr-form-control">
                             {{ form.csrf_token }}
                             <div class="form-group">
                                 {{ form.api_key.label }}
@@ -73,12 +42,45 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                        {{ form.submit(class="btn btn-primary center") }}
+                    {{ form.submit(class="btn btn-primary center") }}
                 </div>
             </div>
             </form>
         </div>
     </div>
+
+    <div class="clr-row">        
+        <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
+            <div class="card">
+                <div class="card-header">
+                    JSON Files (Click to Download) (Files will appear when they have finished.)
+                </div>
+                <div class="card-block">
+                    <div class="card-text">
+                        <section id="jsonfiles" class="files-block">
+                            <table class="table table-compact">
+                                <thead>
+                                    <tr>
+                                        <th>File #</th>
+                                        <th>Filename</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for file in files %}
+                                    <tr>
+                                        <td>#</td>
+                                        <td><h4><a href="{{ url_for('static', filename='json/' + file) }}" download>{{ file }}</a></h4></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <script>
         setInterval("json_file_refresh();",5000); 
