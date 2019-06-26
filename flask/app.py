@@ -169,7 +169,8 @@ def index():
 def example():
     with open('static/example/example.json', 'r') as j:
         json_example = json.load(j)
-    return render_template('example.html', json_example=json_example)
+        json_pretty = json.dumps(json_example, sort_keys=True, indent=4)
+    return render_template('example.html', json_example=json_pretty)
 
 
 @application.route("/get-json")

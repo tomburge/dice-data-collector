@@ -59,6 +59,8 @@ def get_task_status():
             runtime = tasks[task]['runtime']
             trace = tasks[task]['traceback']
             err = tasks[task]['exception']
+            if runtime is not None:
+                runtime = round(int(runtime), 4)
             bg_tasks.update({i: {'name': name , 'state': state, 'runtime': runtime, 'trace': trace, 'exception': err}})
             i = i + 1
     
