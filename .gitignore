@@ -108,6 +108,7 @@ flask/dice-flask/
 # vscode stuff
 .vscode/
 flask/.vscode/
+flask/oldcode/
 .idea/
 dice-data-collector.tar
 
