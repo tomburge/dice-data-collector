@@ -22,49 +22,68 @@ def get_vm_info(vm, depth=1, max_depth=20):
         if i.key == 'machine.id':
             vmtype = 'vdi'
 
-    vm_ds = ''
-
-    if config.datastoreUrl:
-        vm_ds = config.datastoreUrl[0].name
-    else:
-        vm_ds = 'error'
-
+    instanceUuid = summary.config.instanceUuid if summary.config.instanceUuid is not None else 'error'
+    datacenter = parent.parent.name if parent.parent.name is not None else 'error'
+    host = summary.runtime.host.name if summary.runtime.host.name is not None else 'error'
+    esx_version = summary.runtime.host.summary.config.product.version if summary.runtime.host.summary.config.product.version is not None else 'error'
+    esx_type = summary.runtime.host.summary.config.product.name if summary.runtime.host.summary.config.product.name is not None else 'error'
+    name = summary.vm.name if summary.vm.name is not None else 'error'
+    num_cpu = summary.config.numCpu if summary.config.numCpu is not None else 'error'
+    memory_mb = summary.config.memorySizeMB if summary.config.memorySizeMB is not None else 'error'
+    cpu_usage = summary.quickStats.overallCpuUsage if summary.quickStats.overallCpuUsage is not None else 'error'
+    cpu_demand = summary.quickStats.overallCpuDemand if summary.quickStats.overallCpuDemand is not None else 'error'
+    guest_mem_usage = summary.quickStats.guestMemoryUsage if summary.quickStats.guestMemoryUsage is not None else 'error'
+    host_mem_usage = summary.quickStats.hostMemoryUsage if summary.quickStats.hostMemoryUsage is not None else 'error'
+    balloon_mem = summary.quickStats.balloonedMemory if summary.quickStats.balloonedMemory is not None else 'error'
+    swapped_mem = summary.quickStats.swappedMemory if summary.quickStats.swappedMemory is not None else 'error'
+    compressed_mem = summary.quickStats.compressedMemory if summary.quickStats.compressedMemory is not None else 'error'
+    uptime = summary.quickStats.uptimeSeconds if summary.quickStats.uptimeSeconds is not None else 'error'
+    guest_id = summary.guest.guestId if summary.guest.guestId is not None else 'error'
+    os_name = summary.guest.guestFullName if summary.guest.guestFullName is not None else 'error'
+    tools_status = summary.guest.toolsStatus if summary.guest.toolsStatus is not None else 'error'
+    tools_ver_status = summary.guest.toolsVersionStatus if summary.guest.toolsVersionStatus is not None else 'error'
+    tools_run_status = summary.guest.toolsRunningStatus if summary.guest.toolsRunningStatus is not None else 'error'
+    tools_version = config.tools.toolsVersion if config.tools.toolsVersion is not None else 'error'
+    vhw_version = config.version if config.version is not None else 'error'
+    vm_ds = config.datastoreUrl[0].name if config.datastoreUrl[0].name is not None else 'error'
+    power_state = summary.runtime.powerState if summary.runtime.powerState is not None else 'error'
+    connection_state = summary.runtime.connectionState if summary.runtime.connectionState is not None else 'error'
 
     vm_obj = {}
 
     vm_obj.update(
         {
-            summary.config.instanceUuid: {
+            instanceUuid: {
                 "Datacenter": parent.parent.name,
-                "Cluster": summary.runtime.host.parent.name,
-                "Host": summary.runtime.host.name,
-                "ESXVersion": summary.runtime.host.summary.config.product.version,
-                "ESXType": summary.runtime.host.summary.config.product.name,
-                "Name": summary.vm.name,
-                "NumCpu": summary.config.numCpu,
-                "MemoryMB": summary.config.memorySizeMB,
-                "CpuUsage": summary.quickStats.overallCpuUsage,
-                "CpuDemand": summary.quickStats.overallCpuDemand,
-                "GuestMemoryUsage": summary.quickStats.guestMemoryUsage,
-                "HostMemoryUsage": summary.quickStats.hostMemoryUsage,
-                "BalloonedMemory": summary.quickStats.balloonedMemory,
-                "SwappedMemory": summary.quickStats.swappedMemory,
-                "CompressedMemory": summary.quickStats.compressedMemory,
-                "UptimeSeconds": summary.quickStats.uptimeSeconds,
-                "GuestId": summary.guest.guestId,
-                "OS": summary.guest.guestFullName,
+                "Cluster": datacenter,
+                "Host": host,
+                "ESXVersion": esx_version,
+                "ESXType": esx_type,
+                "Name": name,
+                "NumCpu": num_cpu,
+                "MemoryMB": memory_mb,
+                "CpuUsage": cpu_usage,
+                "CpuDemand": cpu_demand,
+                "GuestMemoryUsage": guest_mem_usage,
+                "HostMemoryUsage": host_mem_usage,
+                "BalloonedMemory": balloon_mem,
+                "SwappedMemory": swapped_mem,
+                "CompressedMemory": compressed_mem,
+                "UptimeSeconds": uptime,
+                "GuestId": guest_id,
+                "OS": os_name,
                 "VMType": vmtype,
-                "ToolsStatus": summary.guest.toolsStatus,
-                "ToolsVersionStatus": summary.guest.toolsVersionStatus,
-                "ToolsRunningStatus": summary.guest.toolsRunningStatus,
-                "ToolsVersion": config.tools.toolsVersion,
-                "vHWVersion": config.version,
+                "ToolsStatus": tools_status,
+                "ToolsVersionStatus": tools_ver_status,
+                "ToolsRunningStatus": tools_run_status,
+                "ToolsVersion": tools_version,
+                "vHWVersion": vhw_version,
                 "Datastore": vm_ds,
                 "StorageUsed": storage_used_gb,
                 "StorageUnused": storage_alloc_gb,
                 "StorageAllocated": storage_used_gb + storage_alloc_gb,
-                "PowerState": summary.runtime.powerState,
-                "ConnectionState": summary.runtime.connectionState
+                "PowerState": power_state,
+                "ConnectionState": connection_state
             }
         }
     )
@@ -88,39 +107,63 @@ def get_host_info(host, depth=1, max_depth=20):
     parent = host.parent
     summary = host.summary
 
-    ghz = round(summary.hardware.cpuMhz / 1000, 2)
-    ramgb = int(((summary.hardware.memorySize / 1024) / 1024) / 1024)
+    uuid = summary.hardware.uuid if summary.hardware.uuid is not None else 'error'
+    datacenter = parent.parent.name if parent.parent.name is not None else 'error'
+    cluster = summary.host.parent.name if summary.host.parent.name is not None else 'error'
+    host = summary.host.name if summary.host.name is not None else 'error'
+    esx_version = summary.config.product.version if summary.config.product.version is not None else 'error'
+    esx_build = summary.config.product.build if summary.config.product.build is not None else 'error'
+    esx_type = summary.config.product.name if summary.config.product.name is not None else 'error'
+    api_version = summary.config.product.apiVersion if summary.config.product.apiVersion is not None else 'error'
+    vendor = summary.hardware.vendor if summary.hardware.vendor is not None else 'error'
+    model = summary.hardware.model if summary.hardware.model is not None else 'error'
+    cpus = summary.hardware.numCpuPkgs if summary.hardware.numCpuPkgs is not None else 'error'
+    cores = summary.hardware.numCpuCores if summary.hardware.numCpuCores is not None else 'error'
+    threads = summary.hardware.numCpuThreads if summary.hardware.numCpuThreads is not None else 'error'
+    ghz = round(summary.hardware.cpuMhz / 1000, 2) if summary.hardware.cpuMhz is not None else 'error'
+    mhz = summary.hardware.cpuMhz if summary.hardware.cpuMhz is not None else 'error'
+    hz = hardware.cpuInfo.hz if hardware.cpuInfo.hz is not None else 'error'
+    cpu_type = summary.hardware.cpuModel if summary.hardware.cpuModel is not None else 'error'
+    cpu_usage = summary.quickStats.overallCpuUsage if summary.quickStats.overallCpuUsage is not None else 'error'
+    ram = summary.hardware.memorySize if summary.hardware.memorySize is not None else 'error'
+    ramgb = int(((summary.hardware.memorySize / 1024) / 1024) / 1024) if summary.hardware.memorySize is not None else 'error' 
+    ram_usage = summary.quickStats.overallMemoryUsage if summary.quickStats.overallMemoryUsage is not None else 'error'
+    connection_state = summary.runtime.connectionState if summary.runtime.connectionState is not None else 'error'
+    power_state = summary.runtime.powerState if summary.runtime.powerState is not None else 'error'
+    maint_mode = summary.runtime.inMaintenanceMode if summary.runtime.inMaintenanceMode is not None else 'error'
+    boot_time = str(summary.runtime.bootTime) if summary.runtime.bootTime is not None else 'error'
+    overall_status = summary.overallStatus if summary.overallStatus is not None else 'error'
 
     host_obj = {}
 
     host_obj.update(
         {
-            summary.hardware.uuid: {
-                "Datacenter": parent.parent.name,
-                "Cluster": summary.host.parent.name,
-                "Host": summary.host.name,
-                "ESXVersion": summary.config.product.version,
-                "ESXBuild": summary.config.product.build,
-                "ESXType": summary.config.product.name,
-                "APIVersion": summary.config.product.apiVersion,
-                "Vendor": summary.hardware.vendor,
-                "Model": summary.hardware.model,
-                "CPUs": summary.hardware.numCpuPkgs,
-                "Cores": summary.hardware.numCpuCores,
-                "Threads": summary.hardware.numCpuThreads,
+            uuid: {
+                "Datacenter": datacenter,
+                "Cluster": cluster,
+                "Host": host,
+                "ESXVersion": esx_version,
+                "ESXBuild": esx_build,
+                "ESXType": esx_type,
+                "APIVersion": api_version,
+                "Vendor": vendor,
+                "Model": model,
+                "CPUs": cpus,
+                "Cores": cores,
+                "Threads": threads,
                 "Ghz": ghz,
-                "Mhz": summary.hardware.cpuMhz,
-                "Hz": hardware.cpuInfo.hz,
-                "CPUType": summary.hardware.cpuModel,
-                "CPUUsage": summary.quickStats.overallCpuUsage,
-                "RAM": summary.hardware.memorySize,
+                "Mhz": mhz,
+                "Hz": hz,
+                "CPUType": cpu_type,
+                "CPUUsage": cpu_usage,
+                "RAM": ram,
                 "RAMGB": ramgb,
-                "RAMUsage": summary.quickStats.overallMemoryUsage,
-                "ConnectionState": summary.runtime.connectionState,
-                "PowerState": summary.runtime.powerState,
-                "MaintMode": summary.runtime.inMaintenanceMode,
-                "BootTime": str(summary.runtime.bootTime),
-                "OverallStatus": summary.overallStatus,
+                "RAMUsage": ram_usage,
+                "ConnectionState": connection_state,
+                "PowerState": power_state,
+                "MaintMode": maint_mode,
+                "BootTime": boot_time,
+                "OverallStatus": overall_status,
             }
         }
     )
@@ -140,7 +183,6 @@ def get_cluster_info(cluster, depth=1, max_depth=10):
             get_ds_info(c, depth + 1)
         return
 
-    name = cluster.name
     parent = cluster.parent
     summary = cluster.summary
     config = cluster.configuration
@@ -156,27 +198,43 @@ def get_cluster_info(cluster, depth=1, max_depth=10):
         cpufrp = 0
         memfrp = 0
 
+    name = cluster.name if cluster.name is not None else 'error'
+    total_cpu = summary.totalCpu if summary.totalCpu is not None else 'error'
+    total_mem = summary.totalMemory if summary.totalMemory is not None else 'error'
+    total_cores = summary.numCpuCores if summary.numCpuCores is not None else 'error'
+    total_threads = summary.numCpuThreads if summary.numCpuThreads is not None else 'error'
+    eff_cpu = summary.effectiveCpu if summary.effectiveCpu is not None else 'error'
+    eff_mem = summary.effectiveMemory if summary.effectiveMemory is not None else 'error'
+    total_hosts = summary.numHosts if summary.numHosts is not None else 'error'
+    eff_hosts = summary.numEffectiveHosts if summary.numEffectiveHosts is not None else 'error'
+    overall_status = summary.overallStatus if summary.overallStatus is not None else 'error'
+    total_cpu_mhz = summary.usageSummary.totalCpuCapacityMhz if summary.usageSummary.totalCpuCapacityMhz is not None else 'error'
+    total_mem_mb = summary.usageSummary.totalMemCapacityMB if summary.usageSummary.totalMemCapacityMB is not None else 'error'
+    cpu_demand = summary.usageSummary.cpuDemandMhz if summary.usageSummary.cpuDemandMhz is not None else 'error'
+    mem_demand = summary.usageSummary.memDemandMB if summary.usageSummary.memDemandMB is not None else 'error'
+    total_vm_count = summary.usageSummary.totalVmCount if summary.usageSummary.totalVmCount is not None else 'error'
+
     cluster_obj = {}
 
     cluster_obj.update(
         {
             name: {
-                "TotalCPU": summary.totalCpu,
-                "TotalMem": summary.totalMemory,
-                "TotalCores": summary.numCpuCores,
-                "TotalThreads": summary.numCpuThreads,
-                "EffectiveCPU": summary.effectiveCpu,
-                "EffectiveMem": summary.effectiveMemory,
-                "TotalHosts": summary.numHosts,
-                "EffectiveHosts": summary.numEffectiveHosts,
-                "OverallStatus": summary.overallStatus,
+                "TotalCPU": total_cpu,
+                "TotalMem": total_mem,
+                "TotalCores": total_cores,
+                "TotalThreads": total_threads,
+                "EffectiveCPU": eff_cpu,
+                "EffectiveMem": eff_mem,
+                "TotalHosts": total_hosts,
+                "EffectiveHosts": eff_hosts,
+                "OverallStatus": overall_status,
                 "CPUFailover": cpufrp,
                 "MemFailover": memfrp,
-                "TotalCPUMhz": summary.usageSummary.totalCpuCapacityMhz,
-                "TotalMemMB": summary.usageSummary.totalMemCapacityMB,
-                "CPUDemand": summary.usageSummary.cpuDemandMhz,
-                "MemDemand": summary.usageSummary.memDemandMB,
-                "TotalVMCount": summary.usageSummary.totalVmCount
+                "TotalCPUMhz": total_cpu_mhz,
+                "TotalMemMB": total_mem_mb,
+                "CPUDemand": cpu_demand,
+                "MemDemand": mem_demand,
+                "TotalVMCount": total_vm_count
             }           
         }
     )
@@ -199,18 +257,21 @@ def get_ds_info(ds, depth=1, max_depth=10):
     parent = ds.parent
     summary = ds.summary
 
-    storage_cap_gb = int(((summary.capacity / 1024) / 1024) / 1024)
-    storage_free_gb = int(((summary.freeSpace / 1024) / 1024) / 1024)
+    name = summary.name if summary.name is not None else 'error'
+    datacenter = parent.parent.name if parent.parent.name is not None else 'error'
+    storage_free_gb = int(((summary.freeSpace / 1024) / 1024) / 1024) if summary.freeSpace is not None else 'error'
+    storage_cap_gb = int(((summary.capacity / 1024) / 1024) / 1024) if summary.capacity is not None else 'error'
+    ds_type = summary.type if summary.type is not None else 'error'
 
     ds_obj = {}
 
     ds_obj.update(
         {
-            summary.name: {
-                "Datacenter": parent.parent.name,
+            name: {
+                "Datacenter": datacenter,
                 "Capacity": storage_cap_gb,
                 "FreeSpace": storage_free_gb,
-                "Type": summary.type
+                "Type": ds_type
             }           
         }
     )
@@ -235,12 +296,15 @@ def get_net_info(net, depth=1, max_depth=10):
     runtime = net.runtime
     summary = net.summary
 
+    name = summary.name if summary.name is not None else 'error'
+    uuid = summary.uuid if summary.uuid is not None else 'error'
+
     net_obj = {}
 
     net_obj.update(
         {
-            summary.name: {
-                "vDSUUID": summary.uuid,
+            name: {
+                "vDSUUID": uuid,
             }           
         }
     )
@@ -264,12 +328,15 @@ def get_pg_info(pg, depth=1, max_depth=10):
     parent = pg.parent
     summary = pg.summary
 
+    name = summary.name if summary.name is not None else 'error'
+    vds = config.distributedVirtualSwitch.name if config.distributedVirtualSwitch.name is not None else 'error'
+
     pg_obj = {}
 
     pg_obj.update(
         {
-            summary.name: {
-                "vDS": config.distributedVirtualSwitch.name,
+            name: {
+                "vDS": vds,
             }           
         }
     )
