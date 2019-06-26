@@ -14,7 +14,7 @@ from celery import Celery, task
 from test_connect import test_vrops_connect, test_vcenter_connect
 from vrops import pull_data_from_vrops
 from vcenter import pull_data_from_vcenter
-from general_tasks import dice_transmit, get_list_of_json_files
+from general_tasks import dice_transmit, get_list_of_json_files, get_task_status
 import config
 
 # ---------------------------------------------------------------------------------
@@ -176,7 +176,8 @@ def example():
 def get_json():
     form = TransmitForm()
     files = get_list_of_json_files()
-    return render_template('json.html', form=form, files=files)
+    tasks = get_task_status()
+    return render_template('json.html', form=form, files=files, tasks=tasks)
 
 
 @application.route("/transmit-data", methods=["GET","POST"])

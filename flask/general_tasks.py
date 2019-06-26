@@ -41,3 +41,25 @@ def get_list_of_json_files():
         if fnmatch.fnmatch(files, pattern):
             json_list.append(files)
     return json_list
+
+
+def get_task_status():
+    headers = {'Accept': 'application/json'}
+    url = 'http://localhost:5555/api/tasks'
+    response = requests.request("GET", url=url, headers=headers, verify=False)
+    tasks = json.loads(response.text)
+
+    bg_tasks = {}
+
+    i = 0
+    while i < len(tasks):
+        for task in tasks:
+            name = tasks[task]['name']
+            state = tasks[task]['state']
+            runtime = tasks[task]['runtime']
+            trace = tasks[task]['traceback']
+            err = tasks[task]['exception']
+            bg_tasks.update({i: {'name': name , 'state': state, 'runtime': runtime, 'trace': trace, 'exception': err}})
+            i = i + 1
+    
+    return bg_tasks
