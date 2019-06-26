@@ -5,14 +5,14 @@
 <div>
     <div class="clr-row">
         <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
-            <form role="form" class="clr-form" name="transmit" id="transmit" method="POST" action="{{ url_for('transmit_data') }}">
             <div class="card">
                 <div class="card-header">
                     Send to DICE (Internet Access Required)
                 </div>
                 <div class="card-block">
-                    <div class="card-text clr-form-control">
-                        <section class="form-block clr-form-control">
+                <form role="form" class="clr-form" name="transmit" id="transmit" method="POST" action="{{ url_for('transmit_data') }}">
+                    <div class="card-text">    
+                        <section class="form-block">
                             {{ form.csrf_token }}
                             <div class="form-group">
                                 {{ form.api_key.label }}
@@ -43,12 +43,48 @@
                 </div>
                 <div class="card-footer">
                     {{ form.submit(class="btn btn-primary center") }}
+                </form>
                 </div>
             </div>
-            </form>
+        </div>
+        <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
+            <div class="card">
+                <div class="card-header">
+                    Task Monitor
+                </div>
+                <div class="card-block">
+                    <div class="card-text">
+                        <section id="tasks">
+                            <table class="table table-compact">
+                                <thead>
+                                    <tr>
+                                        <th>Task Name</th>
+                                        <th>State</th>
+                                        <th>Runtime</th>
+                                        <th>Exception</th>
+                                        <th>Traceback</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for key, value in tasks.items() %}
+                                    <tr>
+                                        <td><h4>{{ value['name'] }}</h4></td>
+                                        <td><h4>{{ value['state'] }}</h4></td>
+                                        <td><h4>{{ value['runtime'] }}</h4></td>
+                                        <td><h4>{{ value['trace'] }}</h4></td>
+                                        <td><h4>{{ value['err'] }}</h4></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </section>
+                    </div>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
         </div>
     </div>
-
     <div class="clr-row">        
         <div class="clr-col-lg-5 clr-col-md-8 clr-col-12">
             <div class="card">
@@ -61,14 +97,12 @@
                             <table class="table table-compact">
                                 <thead>
                                     <tr>
-                                        <th>File #</th>
                                         <th>Filename</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for file in files %}
                                     <tr>
-                                        <td>#</td>
                                         <td><h4><a href="{{ url_for('static', filename='json/' + file) }}" download>{{ file }}</a></h4></td>
                                     </tr>
                                     {% endfor %}
@@ -86,6 +120,12 @@
         setInterval("json_file_refresh();",5000); 
         function json_file_refresh() {
             $( "#jsonfiles" ).load(location.href + " #jsonfiles" );
+        }
+    </script>
+    <script>
+        setInterval("json_file_refresh();",5000); 
+        function json_file_refresh() {
+            $( "#tasks" ).load(location.href + " #tasks" );
         }
     </script>
 

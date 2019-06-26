@@ -1,0 +1,1 @@
+docker exec -it dicedatacollector_flask_1 bash
