@@ -208,8 +208,8 @@ def get_ds_info(ds, depth=1, max_depth=10):
         {
             summary.name: {
                 "Datacenter": parent.parent.name,
-                "Capacity": summary.capacity,
-                "FreeSpace": summary.freeSpace,
+                "Capacity": storage_cap_gb,
+                "FreeSpace": storage_free_gb,
                 "Type": summary.type
             }           
         }
