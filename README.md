@@ -4,7 +4,7 @@ DICE Data Collector Container
 
 This container uses Alpine Linux with Python 3.7.
 
-Current Specs are Flask App running natively.
+Current Specs are Flask Web App with Celery for background workers, and Redis for message broker.
 
 To get started:
 
@@ -21,15 +21,15 @@ TODOs
 
 -Add error checking (Any error comes up as Error 500 currently)
 
--Add Test Connection functionality
-
--Add Timer for execution
-
--Replicate TDM functionality for vCenter
-
 -Investigate collecting telegraf metrics (Tom)
 
 -Investigate using appliance to push vrops to vCenter (Tom)
+
+-~~Add Test Connection functionality~~
+
+-~~Add Timer for execution~~
+
+-~~Replicate TDM functionality for vCenter~~
 
 -~~Change web layer to Gunicorn~~
 
