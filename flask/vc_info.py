@@ -15,6 +15,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
     config = vm.config
     network = vm.network
     parent = vm.parent
+    resource_pool = vm.resourcePool
     summary = vm.summary
 
     vmtype = 'server'
@@ -56,6 +57,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
     vhw_version = config.version if config.version is not None else 'error'
     vm_ds = config.datastoreUrl[0].name if config.datastoreUrl[0].name is not None else 'error'
     portgroup = network[0].name if network[0].name is not None else 'error'
+    res_pool = resource_pool.name if resource_pool is not None else 'error'
     power_state = summary.runtime.powerState if summary.runtime.powerState is not None else 'error'
     connection_state = summary.runtime.connectionState if summary.runtime.connectionState is not None else 'error'
 
@@ -94,6 +96,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
                 "StorageAllocated": storage_used_gb + storage_alloc_gb,
                 "Portgroup": portgroup,
                 "Switch": switch,
+                "ResourcePool": res_pool,
                 "PowerState": power_state,
                 "ConnectionState": connection_state
             }
@@ -120,7 +123,7 @@ def get_host_info(host, depth=1, max_depth=20):
     summary = host.summary
 
     uuid = summary.hardware.uuid if summary.hardware.uuid is not None else 'error'
-    datacenter = parent.parent.name if parent.parent.name is not None else 'error'
+    datacenter = parent.parent.parent.name if parent.parent.parent.name is not None else 'error'
     cluster = summary.host.parent.name if summary.host.parent.name is not None else 'error'
     host = summary.host.name if summary.host.name is not None else 'error'
     esx_version = summary.config.product.version if summary.config.product.version is not None else 'error'
@@ -211,6 +214,7 @@ def get_cluster_info(cluster, depth=1, max_depth=10):
         memfrp = 0
 
     name = cluster.name if cluster.name is not None else 'error'
+    datacenter = parent.parent.name if parent.parent.name is not None else 'error'
     total_cpu_ghz = round(summary.totalCpu  / 1000, 2) if summary.totalCpu is not None else 'error'
     total_mem_gb = int(((summary.totalMemory / 1024) / 1024) / 1024) if summary.totalMemory is not None else 'error'
     total_cores = summary.numCpuCores if summary.numCpuCores is not None else 'error'
@@ -231,6 +235,7 @@ def get_cluster_info(cluster, depth=1, max_depth=10):
     cluster_obj.update(
         {
             name: {
+                "Datacenter": datacenter,
                 "TotalCPUGhz": total_cpu_ghz,
                 "TotalMemGB": total_mem_gb,
                 "TotalCores": total_cores,
