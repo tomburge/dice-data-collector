@@ -28,16 +28,19 @@ def get_vm_info(vm, depth=1, max_depth=20):
     print(summary.vm.name)
 
     if type(network[0]) == vim.dvs.DistributedVirtualPortgroup:
-        for n in network:
-            if network.name is not 'none':
-                switch.append(network[0].config.distributedVirtualSwitch.name if network[0].config.distributedVirtualSwitch.name is not None else 'error')
+        i = 0
+        while i < len(network):
+            if network[i].name is not 'none':
+                switch.append(network[i].config.distributedVirtualSwitch.name if network[i].config.distributedVirtualSwitch.name is not None else 'error')
+                i = i + 1
             else:
                 switch.append('error')
 
     elif type(network[0]) == vim.Network:
-        for n in network:
-            if network.name is not 'none': 
-                switch.append(summary.runtime.host.config.network.vswitch[0].name if summary.runtime.host.config.network.vswitch[0].name is not None else 'error')
+        i = 0
+        while i < len(network):
+            if network[i].name is not 'none': 
+                switch.append(summary.runtime.host.config.network.vswitch[i].name if summary.runtime.host.config.network.vswitch[i].name is not None else 'error')
             else:
                 switch.append('error')
     
