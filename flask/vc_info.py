@@ -43,7 +43,10 @@ def get_vm_info(vm, depth=1, max_depth=20):
         i = 0
         while i < len(network):
             if network[i].name is not 'none' and network[i].summary.accessible is not False:
-                switch.append(summary.runtime.host.config.network.vswitch[i].name if summary.runtime.host.config.network.vswitch[i].name is not None else 'error')
+                s = 0
+                while s < len(summary.runtime.host.config.network.vswitch) 
+                    switch.append(summary.runtime.host.config.network.vswitch[s].name if summary.runtime.host.config.network.vswitch[s].name is not None else 'error')
+                    s = s + 1
                 i = i + 1
             elif network[i].summary.accessible is False:
                 i = i + 1
