@@ -30,7 +30,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
     if type(network[0]) == vim.dvs.DistributedVirtualPortgroup:
         i = 0
         while i < len(network):
-            if network[i].name is not 'none':
+            if network[i].name is not 'none' and network[i].summary.accessible is not False:
                 switch.append(network[i].config.distributedVirtualSwitch.name if network[i].config.distributedVirtualSwitch.name is not None else 'error')
                 i = i + 1
             else:
@@ -39,12 +39,12 @@ def get_vm_info(vm, depth=1, max_depth=20):
     elif type(network[0]) == vim.Network:
         i = 0
         while i < len(network):
-            if network[i].name is not 'none': 
+            if network[i].name is not 'none' and network[i].summary.accessible is not False: 
                 switch.append(summary.runtime.host.config.network.vswitch[i].name if summary.runtime.host.config.network.vswitch[i].name is not None else 'error')
                 i = i + 1
             else:
                 switch.append('error')
-    
+
     instanceUuid = summary.config.instanceUuid if summary.config.instanceUuid is not None else 'error'
     datacenter = parent.parent.name if parent.parent.name is not None else 'error'
     cluster = summary.runtime.host.parent.name if summary.runtime.host.parent.name is not None else 'error'
@@ -158,7 +158,7 @@ def get_host_info(host, depth=1, max_depth=20):
     cpu_type = summary.hardware.cpuModel if summary.hardware.cpuModel is not None else 'error'
     cpu_usage = summary.quickStats.overallCpuUsage if summary.quickStats.overallCpuUsage is not None else 'error'
     ram = summary.hardware.memorySize if summary.hardware.memorySize is not None else 'error'
-    ramgb = int(((summary.hardware.memorySize / 1024) / 1024) / 1024) if summary.hardware.memorySize is not None else 'error' 
+    ramgb = int(((summary.hardware.memorySize / 1024) / 1024) / 1024) if summary.hardware.memorySize is not None else 'error'
     ram_usage = int(summary.quickStats.overallMemoryUsage / 1024) if summary.quickStats.overallMemoryUsage is not None else 'error'
     connection_state = summary.runtime.connectionState if summary.runtime.connectionState is not None else 'error'
     power_state = summary.runtime.powerState if summary.runtime.powerState is not None else 'error'
@@ -271,7 +271,7 @@ def get_cluster_info(cluster, depth=1, max_depth=10):
                 "CPUDemandGhz": cpu_demand_ghz,
                 "MemDemandGB": mem_demand_gb,
                 "TotalVMCount": total_vm_count
-            }           
+            }
         }
     )
 
@@ -308,7 +308,7 @@ def get_ds_info(ds, depth=1, max_depth=10):
                 "CapacityGB": storage_cap_gb,
                 "FreeSpaceGB": storage_free_gb,
                 "Type": ds_type
-            }           
+            }
         }
     )
 
@@ -341,7 +341,7 @@ def get_net_info(net, depth=1, max_depth=10):
         {
             name: {
                 "vDSUUID": uuid,
-            }           
+            }
         }
     )
 
@@ -373,7 +373,7 @@ def get_pg_info(pg, depth=1, max_depth=10):
         {
             name: {
                 "vDS": vds,
-            }           
+            }
         }
     )
 
