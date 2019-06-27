@@ -31,7 +31,8 @@ def get_vm_info(vm, depth=1, max_depth=20):
         switch = summary.runtime.host.config.network.vswitch[0].name if summary.runtime.host.config.network.vswitch[0].name is not None else 'error'
     
     instanceUuid = summary.config.instanceUuid if summary.config.instanceUuid is not None else 'error'
-    datacenter = parent.parent.name if parent.parent.name is not None else 'error'
+    datacenter = parent.parent.parent.name if parent.parent.parent.name is not None else 'error'
+    cluster = summary.runtime.host.parent.name if summary.runtime.host.parent.name is not None else 'error'
     host = summary.runtime.host.name if summary.runtime.host.name is not None else 'error'
     esx_version = summary.runtime.host.summary.config.product.version if summary.runtime.host.summary.config.product.version is not None else 'error'
     esx_type = summary.runtime.host.summary.config.product.name if summary.runtime.host.summary.config.product.name is not None else 'error'
@@ -66,8 +67,8 @@ def get_vm_info(vm, depth=1, max_depth=20):
     vm_obj.update(
         {
             instanceUuid: {
-                "Datacenter": parent.parent.name,
-                "Cluster": datacenter,
+                "Datacenter": datacenter,
+                "Cluster": cluster,
                 "Host": host,
                 "ESXVersion": esx_version,
                 "ESXType": esx_type,
@@ -121,6 +122,7 @@ def get_host_info(host, depth=1, max_depth=20):
     hardware = host.hardware
     parent = host.parent
     summary = host.summary
+    vm = host.vm
 
     uuid = summary.hardware.uuid if summary.hardware.uuid is not None else 'error'
     datacenter = parent.parent.parent.name if parent.parent.parent.name is not None else 'error'
@@ -148,6 +150,7 @@ def get_host_info(host, depth=1, max_depth=20):
     maint_mode = summary.runtime.inMaintenanceMode if summary.runtime.inMaintenanceMode is not None else 'error'
     boot_time = str(summary.runtime.bootTime) if summary.runtime.bootTime is not None else 'error'
     overall_status = summary.overallStatus if summary.overallStatus is not None else 'error'
+    total_vm_count = len(vm)
 
     host_obj = {}
 
@@ -179,6 +182,7 @@ def get_host_info(host, depth=1, max_depth=20):
                 "MaintMode": maint_mode,
                 "BootTime": boot_time,
                 "OverallStatus": overall_status,
+                "TotalVMCount": total_vm_count
             }
         }
     )

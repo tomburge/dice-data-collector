@@ -31,14 +31,6 @@ dice_json = {
 
 
 def pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id):
-    # ------------------------------------------------------
-    # Pulling data from flask form and populating global auth variables
-    # ------------------------------------------------------
-    # host = vropshost
-    # username = vropsuser
-    # password = vropspass
-    # cust_id = customer_id
-    # ------------------------------------------------------
     # formatting vROPS API URL
     # ------------------------------------------------------
 
@@ -120,94 +112,132 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id
     # ------------------------------------------------------
     # merge the many similar functions below this block into common functions
     def populate_object_data():
-        pass
-    def populate_object_properties():
-        pass
-    def populate_object_parents():
-        pass
-    # ------------------------------------------------------
-
-    def populate_virtual_machine():
         for k in virtual_machines:
             stats = json.loads(get_resource_latest_stats(k))
             dice_json['vms'].update({k: {'name': virtual_machines[k]}})
             for i in stats['values']:
                 for e in i['stat-list']['stat']:
-                    key = e['statKey']['key']
-                    value = e['data'][0]
-                    dice_json['vms'][k].update({key: value})
-    # ------------------------------------------------------
-
-    def populate_virtual_machine_properties():
-        for k in virtual_machines:
-            properties = json.loads(get_res_properties(k))
-            for p in properties['property']:
-                key = p['name']
-                value = p['value']
-                dice_json['vms'][k].update({key: value})
-    # ------------------------------------------------------
-
-    def populate_host_system():
+                    if e:
+                        key = e['statKey']['key']
+                        value = e['data'][0]
+                        dice_json['vms'][k].update({key: value})
+                    else:
+                        dice_json['vms'][k].update({k + 'no key': '0'})
         for k in host_systems:
             stats = json.loads(get_resource_latest_stats(k))
             dice_json['hosts'].update({k: {'name': host_systems[k]}})
             for i in stats['values']:
                 for e in i['stat-list']['stat']:
-                    key = e['statKey']['key']
-                    value = e['data'][0]
-                    dice_json['hosts'][k].update({key: value})
-    # ------------------------------------------------------
-
-    def populate_host_system_properties():
-        for k in host_systems:
-            properties = json.loads(get_res_properties(k))
-            for p in properties['property']:
-                key = p['name']
-                value = p['value']
-                dice_json['hosts'][k].update({key: value})
-    # ------------------------------------------------------
-
-    def populate_host_cluster():
+                    if e:
+                        key = e['statKey']['key']
+                        value = e['data'][0]
+                        dice_json['hosts'][k].update({key: value})        
+                    else:
+                        dice_json['hosts'][k].update({'no key': '0'})
         for k in host_clusters:
             stats = json.loads(get_resource_latest_stats(k))
             dice_json['clusters'].update({k: {'name': host_clusters[k]}})
             for i in stats['values']:
                 for e in i['stat-list']['stat']:
-                    key = e['statKey']['key']
-                    value = e['data'][0]
-                    dice_json['clusters'][k].update({key: value})
-    # ------------------------------------------------------
-
-    def populate_host_cluster_properties():
-        for k in host_clusters:
-            properties = json.loads(get_res_properties(k))
-            for p in properties['property']:
-                key = p['name']
-                value = p['value']
-                dice_json['clusters'][k].update({key: value})
-    # ------------------------------------------------------
-
-    def populate_vmware_dvs():
+                    if e:
+                        key = e['statKey']['key']
+                        value = e['data'][0]
+                        dice_json['clusters'][k].update({key: value})
+                    else:
+                        dice_json['clusters'][k].update({'no key': '0'})
         for k in vmware_dvs:
             stats = json.loads(get_resource_latest_stats(k))
             dice_json['dvs'].update({k: {'name': vmware_dvs[k]}})
             for i in stats['values']:
                 for e in i['stat-list']['stat']:
-                    key = e['statKey']['key']
-                    value = e['data'][0]
-                    dice_json['dvs'][k].update({key: value})
-    # ------------------------------------------------------
+                    if e:
+                        key = e['statKey']['key']
+                        value = e['data'][0]
+                        dice_json['dvs'][k].update({key: value})
+                    else:
+                        dice_json['dvs'][k].update({'no key': '0'})
+        for k in dvs_portgroups:
+            stats = json.loads(get_resource_latest_stats(k))
+            dice_json['pgs'].update({k: {'name': dvs_portgroups[k]}})
+            for i in stats['values']:
+                    for e in i['stat-list']['stat']:
+                        if e:
+                            key = e['statKey']['key']
+                            value = e['data'][0]
+                            dice_json['pgs'][k].update({key: value})
+                        else:
+                            dice_json['pgs'][k].update({'no key': '0'})
+        for k in datastore:
+            stats = json.loads(get_resource_latest_stats(k))
+            dice_json['datastores'].update({k: {'name': datastore[k]}})
+            for i in stats['values']:
+                for e in i['stat-list']['stat']:
+                        if e:
+                            key = e['statKey']['key']
+                            value = e['data'][0]
+                            dice_json['datastores'][k].update({key: value})
+                        else:
+                            dice_json['datastores'][k].update({'no key': '0'})
 
-    def populate_vmware_dvs_properties():
+
+    def populate_object_properties():
+        for k in virtual_machines:
+            properties = json.loads(get_res_properties(k))
+            for p in properties['property']:
+                if p:
+                    key = p['name']
+                    value = p['value']
+                    dice_json['vms'][k].update({key: value})
+                else:
+                    dice_json['vms'][k].update({'no key': '0'})
+        for k in host_systems:
+            properties = json.loads(get_res_properties(k))
+            for p in properties['property']:
+                if p:
+                    key = p['name']
+                    value = p['value']
+                    dice_json['hosts'][k].update({key: value})
+                else:
+                    dice_json['hosts'][k].update({'no key': '0'})
+        for k in host_clusters:
+            properties = json.loads(get_res_properties(k))
+            for p in properties['property']:
+                if p:
+                    key = p['name']
+                    value = p['value']
+                    dice_json['clusters'][k].update({key: value})
+                else:
+                    dice_json['clusters'][k].update({'no key': '0'})
         for k in vmware_dvs:
             properties = json.loads(get_res_properties(k))
             for p in properties['property']:
-                key = p['name']
-                value = p['value']
-                dice_json['dvs'][k].update({key: value})
-    # ------------------------------------------------------
+                if p:
+                    key = p['name']
+                    value = p['value']
+                    dice_json['dvs'][k].update({key: value})
+                else:
+                    dice_json['dvs'][k].update({'no key': '0'})
+        for k in dvs_portgroups:
+            properties = json.loads(get_res_properties(k))
+            for p in properties['property']:
+                if p:
+                    key = p['name']
+                    value = p['value']
+                    dice_json['pgs'][k].update({key: value})
+                else:
+                    dice_json['pgs'][k].update({'no key': '0'})
+        for k in datastore:
+            properties = json.loads(get_res_properties(k))
+            for p in properties['property']:
+                if p:
+                    key = p['name']
+                    value = p['value']
+                    dice_json['datastores'][k].update({key: value})
+                else:
+                    dice_json['datastores'][k].update({'no key': '0'})
 
-    def populate_vmware_dvs_parents():
+
+    def populate_object_parents():
         for k in vmware_dvs:
             parent = json.loads(get_res_parent(k))
             for p in parent['resourceList']:
@@ -215,29 +245,6 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id
                     key = 'objectParent'
                     value = p['resourceKey']['name']
                     dice_json['dvs'][k].update({key: value})
-    # ------------------------------------------------------
-
-    def populate_dvs_portgroups():
-        for k in dvs_portgroups:
-            stats = json.loads(get_resource_latest_stats(k))
-            dice_json['pgs'].update({k: {'name': dvs_portgroups[k]}})
-            for i in stats['values']:
-                for e in i['stat-list']['stat']:
-                    key = e['statKey']['key']
-                    value = e['data'][0]
-                    dice_json['pgs'][k].update({key: value})
-    # ------------------------------------------------------
-
-    def populate_dvs_portgroups_properties():
-        for k in dvs_portgroups:
-            properties = json.loads(get_res_properties(k))
-            for p in properties['property']:
-                key = p['name']
-                value = p['value']
-                dice_json['pgs'][k].update({key: value})
-    # ------------------------------------------------------
-
-    def populate_dvs_portgroups_parents():
         for k in dvs_portgroups:
             parent = json.loads(get_res_parent(k))
             for p in parent['resourceList']:
@@ -245,46 +252,18 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id
                     key = 'objectParent'
                     value = p['resourceKey']['name']
                     dice_json['pgs'][k].update({key: value})
-    # ------------------------------------------------------
 
-    def populate_datastore():
-        for k in datastore:
-            stats = json.loads(get_resource_latest_stats(k))
-            dice_json['datastores'].update({k: {'name': datastore[k]}})
-            for i in stats['values']:
-                for e in i['stat-list']['stat']:
-                    key = e['statKey']['key']
-                    value = e['data'][0]
-                    dice_json['datastores'][k].update({key: value})
-    # ------------------------------------------------------
 
-    def populate_datastore_properties():
-        for k in datastore:
-            properties = json.loads(get_res_properties(k))
-            for p in properties['property']:
-                key = p['name']
-                value = p['value']
-                dice_json['datastores'][k].update({key: value})
     # ------------------------------------------------------
     # calls all populate functions
 
     def populate_data():
         build_global_resource_list()
         populate_global_variables()
-        populate_virtual_machine()
-        populate_virtual_machine_properties()
-        populate_host_system()
-        populate_host_system_properties()
-        populate_host_cluster()
-        populate_host_cluster_properties()
-        populate_vmware_dvs()
-        populate_vmware_dvs_properties()
-        populate_vmware_dvs_parents()
-        populate_dvs_portgroups()
-        populate_dvs_portgroups_properties()
-        populate_dvs_portgroups_parents()
-        populate_datastore()
-        populate_datastore_properties()
+        populate_object_data()
+        populate_object_properties()
+        populate_object_parents()
+
     # ------------------------------------------------------
     # building var for filename format
     formatting = datetime.datetime.now()
