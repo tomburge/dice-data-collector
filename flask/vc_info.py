@@ -31,7 +31,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
         switch = summary.runtime.host.config.network.vswitch[0].name if summary.runtime.host.config.network.vswitch[0].name is not None else 'error'
     
     instanceUuid = summary.config.instanceUuid if summary.config.instanceUuid is not None else 'error'
-    datacenter = parent.parent.parent.name if parent.parent.parent.name is not None else 'error'
+    datacenter = parent.parent.name if parent.parent.name is not None else 'error'
     cluster = summary.runtime.host.parent.name if summary.runtime.host.parent.name is not None else 'error'
     host = summary.runtime.host.name if summary.runtime.host.name is not None else 'error'
     esx_version = summary.runtime.host.summary.config.product.version if summary.runtime.host.summary.config.product.version is not None else 'error'
