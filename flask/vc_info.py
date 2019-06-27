@@ -33,15 +33,21 @@ def get_vm_info(vm, depth=1, max_depth=20):
             if network[i].name is not 'none' and network[i].summary.accessible is not False:
                 switch.append(network[i].config.distributedVirtualSwitch.name if network[i].config.distributedVirtualSwitch.name is not None else 'error')
                 i = i + 1
+            elif network[i].summary.accessible is False:
+                i = i + 1
+                continue
             else:
                 switch.append('error')
 
     elif type(network[0]) == vim.Network:
         i = 0
         while i < len(network):
-            if network[i].name is not 'none' and network[i].summary.accessible is not False: 
+            if network[i].name is not 'none' and network[i].summary.accessible is not False:
                 switch.append(summary.runtime.host.config.network.vswitch[i].name if summary.runtime.host.config.network.vswitch[i].name is not None else 'error')
                 i = i + 1
+            elif network[i].summary.accessible is False:
+                i = i + 1
+                continue
             else:
                 switch.append('error')
 
