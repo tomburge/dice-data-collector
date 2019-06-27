@@ -41,6 +41,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
         while i < len(network):
             if network[i].name is not 'none': 
                 switch.append(summary.runtime.host.config.network.vswitch[i].name if summary.runtime.host.config.network.vswitch[i].name is not None else 'error')
+                i = i + 1
             else:
                 switch.append('error')
     
