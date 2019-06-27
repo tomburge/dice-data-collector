@@ -80,7 +80,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
     tools_run_status = summary.guest.toolsRunningStatus if summary.guest.toolsRunningStatus is not None else 'error'
     tools_version = config.tools.toolsVersion if config.tools.toolsVersion is not None else 'error'
     vhw_version = config.version if config.version is not None else 'error'
-    vm_ds = config.datastoreUrl[0].name if config.datastoreUrl[0].name is not None else 'error'
+    vm_ds = config.datastoreUrl[0].name if config.datastoreUrl is not None else 'error'
     portgroup = network[0].name if network[0].name is not None else 'error'
     res_pool = resource_pool.name if resource_pool is not None else 'error'
     power_state = summary.runtime.powerState if summary.runtime.powerState is not None else 'error'
