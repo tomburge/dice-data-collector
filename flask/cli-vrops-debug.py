@@ -277,6 +277,9 @@ def pull_data_from_vrops():
     # populating global data
     populate_data()
 
+    with open('resources.json', 'w') as j:
+        json.dump(vmware_adapter_resources, j, indent=4)
+
 
 pull_data_from_vrops()
 
