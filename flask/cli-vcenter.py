@@ -38,8 +38,8 @@ dice_json = {
 
 formatting = datetime.datetime.now()
 
-
 for obj in object_view.view:
+
     if isinstance(obj, vim.VirtualMachine):
         vm_obj = info.get_vm_info(obj)
         dice_json['vms'].update(vm_obj)
