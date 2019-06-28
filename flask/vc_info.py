@@ -61,24 +61,25 @@ def get_vm_info(vm, depth=1, max_depth=20):
 
     datacenter = ''
 
-    if parent and type(parent) == vim.Datacenter and type(parent) is not None:
-        datacenter = parent.name
-    elif parent.parent and type(parent.parent) and type(parent.parent) is not None == vim.Datacenter:
-        datacenter = parent.parent.name
-    elif parent.parent.parent and type(parent.parent.parent) and type(parent.parent.parent) is not None == vim.Datacenter:
-        datacenter = parent.parent.parent.name
-    elif parent.parent.parent.parent and type(parent.parent.parent.parent) and type(parent.parent.parent.parent) is not None == vim.Datacenter:
-        datacenter = parent.parent.parent.parent.name
-    elif parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent) is not None == vim.Datacenter:
-        datacenter = parent.parent.parent.parent.parent.name
-    # elif parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
-    #     datacenter = parent.parent.parent.parent.parent.parent.name
-    # elif parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
-    #     datacenter = parent.parent.parent.parent.parent.parent.parent.name
-    # elif parent.parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
-    #     datacenter = parent.parent.parent.parent.parent.parent.parent.parent.name
-    else:
-        datacenter = 'error'
+    try:
+        if parent and type(parent) == vim.Datacenter and type(parent) is not None:
+            datacenter = parent.name
+        elif parent.parent and type(parent.parent) and type(parent.parent) is not None == vim.Datacenter:
+            datacenter = parent.parent.name
+        elif parent.parent.parent and type(parent.parent.parent) and type(parent.parent.parent) is not None == vim.Datacenter:
+            datacenter = parent.parent.parent.name
+        elif parent.parent.parent.parent and type(parent.parent.parent.parent) and type(parent.parent.parent.parent) is not None == vim.Datacenter:
+            datacenter = parent.parent.parent.parent.name
+        elif parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent) is not None == vim.Datacenter:
+            datacenter = parent.parent.parent.parent.parent.name
+        elif parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
+            datacenter = parent.parent.parent.parent.parent.parent.name
+        elif parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
+            datacenter = parent.parent.parent.parent.parent.parent.parent.name
+        elif parent.parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
+            datacenter = parent.parent.parent.parent.parent.parent.parent.parent.name
+    except AttributeError as error:
+            datacenter = 'error'
 
     portgroup = ''
 
