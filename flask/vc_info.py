@@ -27,7 +27,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
 
     print(summary.vm.name)
 
-    if type(network[0]) == vim.dvs.DistributedVirtualPortgroup:
+    if network is not None and type(network[0]) == vim.dvs.DistributedVirtualPortgroup:
         i = 0
         while i < len(network):
             if network[i].name is not 'none' and network[i].summary.accessible is not False:
@@ -38,7 +38,6 @@ def get_vm_info(vm, depth=1, max_depth=20):
                 continue
             else:
                 switch.append('error')
-
     elif type(network[0]) == vim.Network:
         i = 0
         while i < len(network):
