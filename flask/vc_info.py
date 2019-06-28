@@ -63,20 +63,30 @@ def get_vm_info(vm, depth=1, max_depth=20):
 
     if type(parent) == vim.Datacenter and type(parent) is not None:
         datacenter = parent.name
-    elif type(parent.parent) == vim.Datacenter:
+    elif type(parent.parent and type(parent.parent) is not None) == vim.Datacenter:
         datacenter = parent.parent.name
-    elif type(parent.parent.parent) == vim.Datacenter:
+    elif type(parent.parent.parent and type(parent.parent.parent) is not None) == vim.Datacenter:
         datacenter = parent.parent.parent.name
-    elif type(parent.parent.parent.parent) == vim.Datacenter:
+    elif type(parent.parent.parent.parent and type(parent.parent.parent.parent) is not None) == vim.Datacenter:
         datacenter = parent.parent.parent.parent.name
-    elif type(parent.parent.parent.parent.parent) == vim.Datacenter:
+    elif type(parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent) is not None) == vim.Datacenter:
         datacenter = parent.parent.parent.parent.parent.name
-    elif type(parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+    elif type(parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent) is not None) == vim.Datacenter:
         datacenter = parent.parent.parent.parent.parent.parent.name
-    elif type(parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+    elif type(parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent) is not None) == vim.Datacenter:
         datacenter = parent.parent.parent.parent.parent.parent.parent.name
-    elif type(parent.parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+    elif type(parent.parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent.parent) is not None) == vim.Datacenter:
         datacenter = parent.parent.parent.parent.parent.parent.parent.parent.name
+    else:
+        datacenter = 'error'
+
+    portgroup = ''
+
+    if network:
+        if network[0] is not None:
+            portgroup = network[0].name
+        else:
+            portgroup = 'error'
 
     instanceUuid = summary.config.instanceUuid if summary.config.instanceUuid is not None else 'error'
     cluster = summary.runtime.host.parent.name if summary.runtime.host.parent.name is not None else 'error'
@@ -103,7 +113,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
     tools_run_status = summary.guest.toolsRunningStatus if summary.guest.toolsRunningStatus is not None else 'error'
     tools_version = config.tools.toolsVersion if config.tools.toolsVersion is not None else 'error'
     vhw_version = config.version if config.version is not None else 'error'
-    portgroup = network[0].name if network[0].name is not None else 'error'
+    # portgroup = network[0].name if network[0].name is not None else 'error'
     res_pool = resource_pool.name if resource_pool is not None else 'error'
     power_state = summary.runtime.powerState if summary.runtime.powerState is not None else 'error'
     connection_state = summary.runtime.connectionState if summary.runtime.connectionState is not None else 'error'
