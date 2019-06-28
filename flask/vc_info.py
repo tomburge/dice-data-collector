@@ -71,12 +71,12 @@ def get_vm_info(vm, depth=1, max_depth=20):
         datacenter = parent.parent.parent.parent.name
     elif parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent) is not None == vim.Datacenter:
         datacenter = parent.parent.parent.parent.parent.name
-    elif parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
-        datacenter = parent.parent.parent.parent.parent.parent.name
-    elif parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
-        datacenter = parent.parent.parent.parent.parent.parent.parent.name
-    elif parent.parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
-        datacenter = parent.parent.parent.parent.parent.parent.parent.parent.name
+    # elif parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
+    #     datacenter = parent.parent.parent.parent.parent.parent.name
+    # elif parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
+    #     datacenter = parent.parent.parent.parent.parent.parent.parent.name
+    # elif parent.parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent.parent) and type(parent.parent.parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
+    #     datacenter = parent.parent.parent.parent.parent.parent.parent.parent.name
     else:
         datacenter = 'error'
 
