@@ -59,8 +59,26 @@ def get_vm_info(vm, depth=1, max_depth=20):
     else:
         vm_ds = 'error'
 
+    datacenter = ''
+
+    if type(parent) == vim.Datacenter:
+        datacenter = parent.name
+    elif type(parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.name
+    elif type(parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.name
+    elif type(parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.parent.parent.parent.name
+
     instanceUuid = summary.config.instanceUuid if summary.config.instanceUuid is not None else 'error'
-    datacenter = parent.parent.name if parent.parent.name is not None else 'error'
     cluster = summary.runtime.host.parent.name if summary.runtime.host.parent.name is not None else 'error'
     host = summary.runtime.host.name if summary.runtime.host.name is not None else 'error'
     esx_version = summary.runtime.host.summary.config.product.version if summary.runtime.host.summary.config.product.version is not None else 'error'
@@ -85,7 +103,6 @@ def get_vm_info(vm, depth=1, max_depth=20):
     tools_run_status = summary.guest.toolsRunningStatus if summary.guest.toolsRunningStatus is not None else 'error'
     tools_version = config.tools.toolsVersion if config.tools.toolsVersion is not None else 'error'
     vhw_version = config.version if config.version is not None else 'error'
-    # vm_ds = config.datastoreUrl[0].name if config.datastoreUrl is not None else 'error'
     portgroup = network[0].name if network[0].name is not None else 'error'
     res_pool = resource_pool.name if resource_pool is not None else 'error'
     power_state = summary.runtime.powerState if summary.runtime.powerState is not None else 'error'
@@ -153,8 +170,26 @@ def get_host_info(host, depth=1, max_depth=20):
     summary = host.summary
     vm = host.vm
 
+    datacenter = ''
+
+    if type(parent) == vim.Datacenter:
+        datacenter = parent.name
+    elif type(parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.name
+    elif type(parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.name
+    elif type(parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.parent.parent.parent.name
+
     uuid = summary.hardware.uuid if summary.hardware.uuid is not None else 'error'
-    datacenter = parent.parent.parent.name if parent.parent.parent.name is not None else 'error'
     cluster = summary.host.parent.name if summary.host.parent.name is not None else 'error'
     host = summary.host.name if summary.host.name is not None else 'error'
     esx_version = summary.config.product.version if summary.config.product.version is not None else 'error'
@@ -246,8 +281,26 @@ def get_cluster_info(cluster, depth=1, max_depth=10):
         cpufrp = 0
         memfrp = 0
 
+    datacenter = ''
+
+    if type(parent) == vim.Datacenter:
+        datacenter = parent.name
+    elif type(parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.name
+    elif type(parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.name
+    elif type(parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.parent.parent.name
+    elif type(parent.parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter:
+        datacenter = parent.parent.parent.parent.parent.parent.parent.parent.name
+
     name = cluster.name if cluster.name is not None else 'error'
-    datacenter = parent.parent.name if parent.parent.name is not None else 'error'
     total_cpu_ghz = round(summary.totalCpu  / 1000, 2) if summary.totalCpu is not None else 'error'
     total_mem_gb = int(((summary.totalMemory / 1024) / 1024) / 1024) if summary.totalMemory is not None else 'error'
     total_cores = summary.numCpuCores if summary.numCpuCores is not None else 'error'
