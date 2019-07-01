@@ -63,20 +63,28 @@ def get_vm_info(vm, depth=1, max_depth=20):
 
     try:
         if parent and type(parent) == vim.Datacenter and type(parent) is not None:
+            print(parent.name)
             datacenter = parent.name
         elif parent.parent and type(parent.parent) == vim.Datacenter and type(parent.parent) is not None:
+            print(parent.parent.name)
             datacenter = parent.parent.name
-        elif parent.parent.parent and type(parent.parent.parent) == vim.Datacenter and type(parent.parent.parent) is not None == vim.Datacenter:
+        elif parent.parent.parent and type(parent.parent.parent) == vim.Datacenter and type(parent.parent.parent) is not None:
+            print(parent.parent.parent.name)
             datacenter = parent.parent.parent.name
-        elif parent.parent.parent.parent and type(parent.parent.parent.parent) == vim.Datacenter and type(parent.parent.parent.parent) is not None == vim.Datacenter:
+        elif parent.parent.parent.parent and type(parent.parent.parent.parent) == vim.Datacenter and type(parent.parent.parent.parent) is not None:
+            print(parent.parent.parent.parent.name)
             datacenter = parent.parent.parent.parent.name
-        elif parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent) == vim.Datacenter and type(parent.parent.parent.parent.parent) is not None == vim.Datacenter:
+        elif parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent) == vim.Datacenter and type(parent.parent.parent.parent.parent) is not None:
+            print(parent.parent.parent.parent.parent.name)
             datacenter = parent.parent.parent.parent.parent.name
-        elif parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent) == vim.Datacenter and type(parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
+        elif parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent) == vim.Datacenter and type(parent.parent.parent.parent.parent.parent) is not None:
+            print(parent.parent.parent.parent.parent.parent.name)
             datacenter = parent.parent.parent.parent.parent.parent.name
-        elif parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter and type(parent.parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
+        elif parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter and type(parent.parent.parent.parent.parent.parent.parent) is not None:
+            print(parent.parent.parent.parent.parent.parent.parent.name)
             datacenter = parent.parent.parent.parent.parent.parent.parent.name
-        elif parent.parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter and type(parent.parent.parent.parent.parent.parent.parent.parent) is not None == vim.Datacenter:
+        elif parent.parent.parent.parent.parent.parent.parent.parent and type(parent.parent.parent.parent.parent.parent.parent.parent) == vim.Datacenter and type(parent.parent.parent.parent.parent.parent.parent.parent) is not None:
+            print(parent.parent.parent.parent.parent.parent.parent.parent.name)
             datacenter = parent.parent.parent.parent.parent.parent.parent.parent.name
     except AttributeError as error:
             datacenter = 'error'
