@@ -1,10 +1,13 @@
 import ssl
 import json
 import datetime
-from pyVim import connect
+import time
+from pyvim import connect
 from pyVmomi import vmodl
 from pyVmomi import vim
 import vc_info as info
+
+start = time.time()
 
 # global auth vars
 host = input('Enter the vCenter FQDN: ')
@@ -46,21 +49,29 @@ for obj in object_view.view:
     if isinstance(obj, vim.HostSystem):
         host_obj = info.get_host_info(obj)
         dice_json['hosts'].update(host_obj)
-    if isinstance(obj, vim.ClusterComputeResource):
-        cluster_obj = info.get_cluster_info(obj)
-        dice_json['clusters'].update(cluster_obj)
-    if isinstance(obj, vim.Datastore):
-        ds_obj = info.get_ds_info(obj)
-        dice_json['datastores'].update(ds_obj)
-    if isinstance(obj, vim.VmwareDistributedVirtualSwitch):
-        vds_obj = info.get_net_info(obj)
-        dice_json['dvs'].update(vds_obj)
-    if isinstance(obj, vim.DistributedVirtualPortgroup):
-        pg_obj = info.get_pg_info(obj)
-        dice_json['pgs'].update(pg_obj)
+    # if isinstance(obj, vim.ClusterComputeResource):
+    #     cluster_obj = info.get_cluster_info(obj)
+    #     dice_json['clusters'].update(cluster_obj)
+    # if isinstance(obj, vim.Datastore):
+    #     ds_obj = info.get_ds_info(obj)
+    #     dice_json['datastores'].update(ds_obj)
+    # if isinstance(obj, vim.VmwareDistributedVirtualSwitch):
+    #     vds_obj = info.get_net_info(obj)
+    #     dice_json['dvs'].update(vds_obj)
+    # if isinstance(obj, vim.DistributedVirtualPortgroup):
+    #     pg_obj = info.get_pg_info(obj)
+    #     dice_json['pgs'].update(pg_obj)
 
 dice_json['filename'] = 'dice_vc_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
+
+fw_time = time.time()
+before_write_time = fw_time - start
+print(f'it took {before_write_time} seconds to run before writing the file')
 
 dice_file = 'dice_vc_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
 with open('static/json/' + dice_file, 'w') as j:
     json.dump(dice_json, j, indent=4)
+
+end = time.time()
+comp_time = end - start
+print(f'it took {comp_time} seconds to finish total')

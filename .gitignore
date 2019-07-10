@@ -90,7 +90,7 @@ ENV/
 env.bak/
 venv.bak/
 dice-flask
-flask/dice-flask/
+flask/dice/
 
 # Spyder project settings
 .spyderproject
