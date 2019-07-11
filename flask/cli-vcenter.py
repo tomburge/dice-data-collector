@@ -49,6 +49,7 @@ for obj in object_view.view:
     if isinstance(obj, vim.HostSystem):
         host_obj = info.get_host_info(obj)
         dice_json['hosts'].update(host_obj)
+    # commented out objects below for future collection - not needed now
     # if isinstance(obj, vim.ClusterComputeResource):
     #     cluster_obj = info.get_cluster_info(obj)
     #     dice_json['clusters'].update(cluster_obj)

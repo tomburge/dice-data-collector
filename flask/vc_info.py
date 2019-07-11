@@ -268,7 +268,7 @@ def get_host_info(host, depth=1, max_depth=20):
 
     return host_obj
 
-
+# commented out objects below for future collection - not needed now
 # def get_cluster_info(cluster, depth=1, max_depth=10):
 #     """ Get info for a particular datastore """
 

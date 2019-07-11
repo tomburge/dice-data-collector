@@ -102,6 +102,7 @@ def pull_data_from_vrops():
                     virtual_machines.update({i['identifier']: i['resourceKey']['name']})
                 if i['resourceKey']['resourceKindKey'] == 'HostSystem':
                     host_systems.update({i['identifier']: i['resourceKey']['name']})
+                # commented out objects below for future collection - not needed now
                 # if i['resourceKey']['resourceKindKey'] == 'ClusterComputeResource':
                 #     host_clusters.update({i['identifier']: i['resourceKey']['name']})
                 # if i['resourceKey']['resourceKindKey'] == 'VmwareDistributedVirtualSwitch':
@@ -156,6 +157,7 @@ def pull_data_from_vrops():
         for k in host_systems:
             dice_json['hosts'].update({k: {'name': host_systems[k]}})
             dice_json['hosts'][k].update(get_stat_keys(k))
+        # commented out objects below for future collection - not needed now
         # for k in host_clusters:
         #     dice_json['clusters'].update({k: {'name': host_clusters[k]}})
         #     dice_json['clusters'][k].update(get_stat_keys(k))
@@ -174,6 +176,7 @@ def pull_data_from_vrops():
             dice_json['vms'][k].update(get_props(k))
         for k in host_systems:
             dice_json['hosts'][k].update(get_props(k))
+        # commented out objects below for future collection - not needed now
         # for k in host_clusters:
         #     dice_json['clusters'][k].update(get_props(k))
         # for k in vmware_dvs:
@@ -183,6 +186,7 @@ def pull_data_from_vrops():
         # for k in datastore:
         #     dice_json['datastores'][k].update(get_props(k))
     # ------------------------------------------------------
+    # commented out objects below for future collection - not needed now
     # def populate_object_parents():
     #     for k in vmware_dvs:
     #         parent = json.loads(get_res_parent(k))
