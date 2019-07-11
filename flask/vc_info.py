@@ -218,7 +218,7 @@ def get_host_info(host, depth=1, max_depth=20):
         mhz = summary.hardware.cpuMhz
         hz = hardware.cpuInfo.hz
         cpu_type = summary.hardware.cpuModel
-        cpu_usage = summary.quickStats.overallCpuUsage
+        cpu_usage = round((summary.quickStats.overallCpuUsage / (cores * mhz)) * 100)
         ram = summary.hardware.memorySize
         ramgb = int(((summary.hardware.memorySize / 1024) / 1024) / 1024)
         ram_usage = int(summary.quickStats.overallMemoryUsage / 1024)
