@@ -138,16 +138,22 @@ def pull_data_from_vrops():
         obj_dict = {}
         for i in stats['values']:
             for e in i['stat-list']['stat']:
-                if e.get('statKey', {}).get('key') in stat_keys:
-                    obj_dict.update({e['statKey']['key']: e['data'][0]})
+                try:
+                    if e.get('statKey', {}).get('key') in stat_keys:
+                        obj_dict.update({e['statKey']['key']: e['data'][0]})
+                except:
+                    pass
         return obj_dict
     # ------------------------------------------------------
     def get_props(k):
         properties = json.loads(get_res_properties(k))
         obj_dict = {}
         for p in properties['property']:
-            if p.get('name') in prop_keys:
-                obj_dict.update({p['name']: p['value']})
+            try:
+                if p.get('name') in prop_keys:
+                    obj_dict.update({p['name']: p['value']})
+            except:
+                pass
         return obj_dict
     # ------------------------------------------------------
     def populate_object_data():
