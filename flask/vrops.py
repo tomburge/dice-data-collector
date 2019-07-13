@@ -133,7 +133,7 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id
                     if e.get('statKey', {}).get('key') in stat_keys:
                         obj_dict.update({e['statKey']['key']: e['data'][0]})
                 except:
-                    pass
+                    continue
         return obj_dict
     # ------------------------------------------------------
     def get_props(k):
@@ -144,7 +144,7 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id
                 if p.get('name') in prop_keys:
                     obj_dict.update({p['name']: p['value']})
             except:
-                pass
+                continue
         return obj_dict
     # ------------------------------------------------------
     def populate_object_data():
