@@ -53,6 +53,7 @@ dice_json = {
     'source': 'vrops',
     'vrops': host,
     "customer_id": cust_id,
+    'collect_time': '',
     'vms': {},
     'hosts': {},
     'clusters': {},
@@ -139,7 +140,7 @@ def pull_data_from_vrops():
         for i in stats['values']:
             for e in i['stat-list']['stat']:
                 try:
-                    if e.get('statKey', {}).get('key') in stat_keys:
+                    if e.get('statKey', {}).get('key') in stat_keys and e['data'][0] is not None:
                         obj_dict.update({e['statKey']['key']: e['data'][0]})
                 except:
                     continue
@@ -232,6 +233,7 @@ pull_data_from_vrops()
 
 fw_time = time.time()
 before_write_time = fw_time - start
+dice_json['collect_time'] = round(before_write_time, 2)
 print(f'it took {before_write_time} seconds to run before writing the file')
 
 dice_file = 'dice_vrops_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'
