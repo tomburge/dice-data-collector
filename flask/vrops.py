@@ -150,11 +150,17 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id
     # ------------------------------------------------------
     def populate_object_data():
         for k in virtual_machines:
-            dice_json['vms'].update({k: {'name': virtual_machines[k]}})
-            dice_json['vms'][k].update(get_stat_keys(k))
+            try:
+                dice_json['vms'].update({k: {'name': virtual_machines[k]}})
+                dice_json['vms'][k].update(get_stat_keys(k))
+            except KeyError:
+                continue
         for k in host_systems:
-            dice_json['hosts'].update({k: {'name': host_systems[k]}})
-            dice_json['hosts'][k].update(get_stat_keys(k))
+            try:
+                dice_json['hosts'].update({k: {'name': host_systems[k]}})
+                dice_json['hosts'][k].update(get_stat_keys(k))
+            except KeyError:
+                continue
         # commented out objects below for future collection - not needed now
         # for k in host_clusters:
         #     dice_json['clusters'].update({k: {'name': host_clusters[k]}})
