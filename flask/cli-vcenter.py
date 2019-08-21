@@ -7,8 +7,6 @@ from pyVmomi import vmodl
 from pyVmomi import vim
 import vc_info as info
 
-start = time.time()
-
 # global auth vars
 host = input('Enter the vCenter FQDN: ')
 user = input('Enter the username for vCenter: ')
@@ -16,6 +14,7 @@ pwd = input('Enter the password for the user: ')
 port = input('Enter the port for vCenter: ')
 cust_id = input('Please enter a customer ID: ')
 
+start = time.time()
 # ssl context setting
 context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 context.verify_mode = ssl.CERT_NONE
@@ -30,6 +29,7 @@ dice_json = {
     'source': 'vcenter',
     'vcenter': host,
     'customer_id': cust_id,
+    'collect_time': '',
     'filename': '',
     'vms': {},
     'hosts': {},
@@ -70,6 +70,7 @@ dice_json['filename'] = 'dice_vc_output_' + formatting.strftime("%Y_%m_%d_%H_%M"
 
 fw_time = time.time()
 before_write_time = fw_time - start
+dice_json['collect_time'] = round(before_write_time, 2)
 print(f'it took {before_write_time} seconds to run before writing the file')
 
 dice_file = 'dice_vc_output_' + formatting.strftime("%Y_%m_%d_%H_%M") + '.json'

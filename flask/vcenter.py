@@ -12,6 +12,7 @@ dice_json = {
     'source': 'vcenter',
     'vcenter': '',
     'customer_id': '',
+    'collect_time': '',
     'filename': '',
     'vms': {},
     'hosts': {},
@@ -69,6 +70,7 @@ def pull_data_from_vcenter(vchost, vcuser, vcpass, vcport, customer_id):
     # ------------------------------------------------------
     fw_time = time.time()
     before_write_time = fw_time - start
+    dice_json['collect_time'] = round(before_write_time, 2)
     print(f'it took {before_write_time} seconds to run before writing the file')
     
     # writing JSON
