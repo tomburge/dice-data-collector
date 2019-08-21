@@ -36,12 +36,16 @@ def pull_data_from_vcenter(vchost, vcuser, vcpass, vcport, customer_id):
     object_view = content.viewManager.CreateContainerView(content.rootFolder, [], True)
 
     for obj in object_view.view:
-        if isinstance(obj, vim.VirtualMachine):
-            vm_obj = info.get_vm_info(obj)
-            dice_json['vms'].update(vm_obj)
-        if isinstance(obj, vim.HostSystem):
-            host_obj = info.get_host_info(obj)
-            dice_json['hosts'].update(host_obj)
+
+        try:
+            if isinstance(obj, vim.VirtualMachine):
+                vm_obj = info.get_vm_info(obj)
+                dice_json['vms'].update(vm_obj)
+            if isinstance(obj, vim.HostSystem):
+                host_obj = info.get_host_info(obj)
+                dice_json['hosts'].update(host_obj)
+        except:
+            continue
         # commented out objects below for future collection - not needed now
         # if isinstance(obj, vim.ClusterComputeResource):
         #     cluster_obj = info.get_cluster_info(obj)
