@@ -25,9 +25,12 @@ def get_vm_info(vm, depth=1, max_depth=20):
     netwk = {}
     portgroup = ''
 
-    for i in config.extraConfig:
-        if i.key == 'machine.id':
-            vmtype = 'vdi'
+    try:
+        for i in config.extraConfig:
+            if i.key == 'machine.id':
+                vmtype = 'vdi'
+    except:
+        pass
 
     if network:
         if network is not None and type(network[0]) == vim.dvs.DistributedVirtualPortgroup:
@@ -91,7 +94,7 @@ def get_vm_info(vm, depth=1, max_depth=20):
         esx_type = summary.runtime.host.summary.config.product.name
         name = summary.vm.name
         num_cpu = summary.config.numCpu
-        memory_gb = int(summary.config.memorySizeMB /1024)
+        memory_gb = int(summary.config.memorySizeMB / 1024)
         cpu_usage = summary.quickStats.overallCpuUsage
         cpu_demand = summary.quickStats.overallCpuDemand
         guest_mem_usage = int(summary.quickStats.guestMemoryUsage / 1024)
