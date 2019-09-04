@@ -15,8 +15,6 @@ vmware_dvs = {}
 dvs_portgroups = {}
 datastore = {}
 vmware_adapter_resources = {}
-test_vm = []
-test_host = []
 
 # stats to pull data for
 stat_keys = [
@@ -93,33 +91,31 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id
         for p in vmware_adapter_resources:
             for i in vmware_adapter_resources[p]['resourceList']:
                 if i['resourceKey']['resourceKindKey'] == 'VirtualMachine':
-                    test_vm.append(i['identifier'])
                     virtual_machines.update({i['identifier']: i['resourceKey']['name']})
                 if i['resourceKey']['resourceKindKey'] == 'HostSystem':
-                    test_host.append(i['identifier'])
                     host_systems.update({i['identifier']: i['resourceKey']['name']})
+                # commented out objects below for future collection - not needed now
+                # if i['resourceKey']['resourceKindKey'] == 'ClusterComputeResource':
+                #     host_clusters.update({i['identifier']: i['resourceKey']['name']})
+                # if i['resourceKey']['resourceKindKey'] == 'VmwareDistributedVirtualSwitch':
+                #     vmware_dvs.update({i['identifier']: i['resourceKey']['name']})
+                # if i['resourceKey']['resourceKindKey'] == 'DistributedVirtualPortgroup':
+                #     dvs_portgroups.update({i['identifier']: i['resourceKey']['name']})
+                # if i['resourceKey']['resourceKindKey'] == 'Datastore':
+                #     datastore.update({i['identifier']: i['resourceKey']['name']})
     # ------------------------------------------------------
-    def get_res_stats(ident):
-        payload = {}
-        if ident == 'vms':
-            payload = {"intervalType": "HOURS", "intervalQuantifier": 1, "rollUpType": "AVG", "resourceId": test_vm, "statKey": stat_keys}
-        elif ident == 'hosts':
-            payload = {"intervalType": "HOURS", "intervalQuantifier": 1, "rollUpType": "AVG", "resourceId": test_host, "statKey": stat_keys}
-        headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
-        new_url = vrops_url + '/resources/stats/query'
-        response = requests.request("POST", url=new_url, headers=headers, json=payload, auth=auth_values, verify=False)
+    def get_resource_latest_stats(ident):
+        """ This function retrieves a full list of the latest stats for an object in vRealize Operations. """
+        headers = {'Accept': 'application/json'}
+        new_url = vrops_url + '/resources/' + ident + '/stats/latest'
+        response = requests.request("GET", url=new_url, headers=headers, auth=auth_values, verify=False)
         return response.text
     # ------------------------------------------------------
     def get_res_properties(ident):
-        """ This function retrieves a full list of the latest stats for all objects collected in vRealize Operations. """
-        payload = {}
-        if ident == 'vms':
-            payload = {"resourceIds": test_vm, 'propertyKeys': prop_keys }
-        elif ident == 'hosts':
-            payload = {"resourceIds": test_host, 'propertyKeys': prop_keys }
-        headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
-        new_url = vrops_url + '/resources/properties/latest/query'
-        response = requests.request("POST", url=new_url, headers=headers, json=payload, auth=auth_values, verify=False)
+        """ This function retrieves a full list of the latest stats for an object in vRealize Operations. """
+        headers = {'Accept': 'application/json'}
+        new_url = vrops_url + '/resources/' + ident + '/properties'
+        response = requests.request("GET", url=new_url, headers=headers, auth=auth_values, verify=False)
         return response.text
     # ------------------------------------------------------
     def get_res_parent(ident):
@@ -129,53 +125,107 @@ def pull_data_from_vrops(vropshost, vropsuser, vropspass, vropsport, customer_id
         response = requests.request("GET", new_url, headers=headers, auth=auth_values, verify=False)
         return response.text
     # ------------------------------------------------------
-    def get_stats(ident):
-        stats = json.loads(get_res_stats(ident))
-        for stat in stats['values']:
-            k = stat['resourceId']
-            for s in stat['stat-list']['stat']:
+    def get_stat_keys(k):
+        stats = json.loads(get_resource_latest_stats(k))
+        obj_dict = {}
+        for i in stats['values']:
+            for e in i['stat-list']['stat']:
                 try:
-                    if s.get('statKey', {}).get('key') in stat_keys:
-                        dice_json[ident][k].update({s['statKey']['key'] : s['data'][0]})
+                    if e.get('statKey', {}).get('key') in stat_keys and e['data'][0] is not None:
+                        obj_dict.update({e['statKey']['key']: e['data'][0]})
                 except:
                     continue
+        return obj_dict
     # ------------------------------------------------------
-    def get_props(ident):
-        properties = json.loads(get_res_properties(ident))
-        for p in properties['values']:
-            k = p['resourceId']
-            dice_json[ident].update({k: {}})
-            for s in p['property-contents']['property-content']:
-                try:
-                    if s.get('statKey', {}) and s.get('values', {}):
-                        dice_json[ident][k].update({s['statKey'] : s['values'][0]})
-                    elif s.get('statKey', {}) and s.get('data', {}):
-                        dice_json[ident][k].update({s['statKey'] : s['data'][0]})
-                except:
-                    continue
+    def get_props(k):
+        properties = json.loads(get_res_properties(k))
+        obj_dict = {}
+        for p in properties['property']:
+            try:
+                if p.get('name') in prop_keys:
+                    obj_dict.update({p['name']: p['value']})
+            except:
+                continue
+        return obj_dict
     # ------------------------------------------------------
-    # def populate_object_name():
-    #     for k in virtual_machines:
-    #         try:
-    #             print(k)
-    #             print(virtual_machines[k])
-    #             dice_json['vms'].update({k: {'name': virtual_machines[k]}})
-    #         except:
-    #             continue
-    #     for k in host_systems:
-    #         try:
-    #             dice_json['hosts'].update({k: {'name': virtual_machines[k]}})
-    #         except:
-    #             continue
+    def populate_object_data():
+        for k in virtual_machines:
+            try:
+                dice_json['vms'].update({k: {'name': virtual_machines[k]}})
+                dice_json['vms'][k].update(get_stat_keys(k))
+            except KeyError:
+                continue
+        for k in host_systems:
+            try:
+                dice_json['hosts'].update({k: {'name': host_systems[k]}})
+                dice_json['hosts'][k].update(get_stat_keys(k))
+            except KeyError:
+                continue
+        # commented out objects below for future collection - not needed now
+        # for k in host_clusters:
+        #     dice_json['clusters'].update({k: {'name': host_clusters[k]}})
+        #     dice_json['clusters'][k].update(get_stat_keys(k))
+        # for k in vmware_dvs:
+        #     dice_json['dvs'].update({k: {'name': vmware_dvs[k]}})
+        #     dice_json['dvs'][k].update(get_stat_keys(k))
+        # for k in dvs_portgroups:
+        #     dice_json['pgs'].update({k: {'name': dvs_portgroups[k]}})
+        #     dice_json['pgs'][k].update(get_stat_keys(k))
+        # for k in datastore:
+        #     dice_json['datastores'].update({k: {'name': datastore[k]}})
+        #     dice_json['datastores'][k].update(get_stat_keys(k))
+    # ------------------------------------------------------
+    def populate_object_properties():
+        for k in virtual_machines:
+            try:
+                dice_json['vms'][k].update(get_props(k))
+            except KeyError:
+                continue
+        for k in host_systems:
+            try:
+                dice_json['hosts'][k].update(get_props(k))
+            except KeyError:
+                continue
+        # commented out objects below for future collection - not needed now
+        # for k in host_clusters:
+        #     dice_json['clusters'][k].update(get_props(k))
+        # for k in vmware_dvs:
+        #     dice_json['dvs'][k].update(get_props(k))
+        # for k in dvs_portgroups:
+        #     dice_json['pgs'][k].update(get_props(k))
+        # for k in datastore:
+        #     dice_json['datastores'][k].update(get_props(k))
+    # ------------------------------------------------------
+    # commented out objects below for future collection - not needed now
+    # def populate_object_parents():
+    #     for k in vmware_dvs:
+    #         parent = json.loads(get_res_parent(k))
+    #         for p in parent['resourceList']:
+    #             try:
+    #                 if p['resourceKey']['adapterKindKey'] == 'VMWARE' and p['resourceKey']['resourceKindKey'] == 'Datacenter':
+    #                     key = 'objectParent'
+    #                     value = p['resourceKey']['name']
+    #                     dice_json['dvs'][k].update({key: value})
+    #             except KeyError:
+    #                 pass
+    #     for k in dvs_portgroups:
+    #         parent = json.loads(get_res_parent(k))
+    #         for p in parent['resourceList']:
+    #             try:
+    #                 if p['resourceKey']['adapterKindKey'] == 'VMWARE' and p['resourceKey']['resourceKindKey'] == 'VmwareDistributedVirtualSwitch':
+    #                     key = 'objectParent'
+    #                     value = p['resourceKey']['name']
+    #                     dice_json['pgs'][k].update({key: value})
+    #             except KeyError:
+    #                 pass
     # ------------------------------------------------------
     # calls all populate functions
     def populate_data():
         build_global_resource_list()
         populate_global_variables()
-        get_props('vms')
-        get_props('hosts')
-        get_stats('vms')
-        get_stats('hosts')
+        populate_object_data()
+        populate_object_properties()
+        # populate_object_parents()
     # ------------------------------------------------------
     # building var for filename format
     formatting = datetime.datetime.now()
