@@ -13,7 +13,7 @@ To get started:
 
 or download the OVA from: 
 
-https://onevmw-my.sharepoint.com/:f:/g/personal/tburge_vmware_com/EnVAcMX3T75Cg3XmJrAOtTUBCBXkKDUrY_QRBRhRZ7XAaQ?e=GZXTdw
+https://www.dicevm.com/
 
 TODOs
 
