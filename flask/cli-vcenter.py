@@ -2,7 +2,7 @@ import ssl
 import json
 import datetime
 import time
-from pyvim import connect
+from pyVim import connect
 from pyVmomi import vmodl
 from pyVmomi import vim
 import vc_info as info
